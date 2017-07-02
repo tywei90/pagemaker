@@ -35,7 +35,7 @@ class UnitTextBody extends React.Component {
         const { showDetail } = this.state;
         return (
             <div className="unit-common unit-textbody" id={id}>
-                <div className="header f-cb">
+                <div className="header f-cb" onClick={(e) => !e.target.className.indexOf('header') && this.setState({'showDetail': !showDetail})}>
                     <i className="f-fl f-hide2 icon iconfont icon-iconfontbi"></i>
                     <input
                         className="f-fl"
@@ -44,7 +44,7 @@ class UnitTextBody extends React.Component {
                         ref="name"
                         onChange={()=>unitAction.editUnit(id, 'name', this.refs.name.value)}
                     />
-                    <i className={`f-fr icon iconfont icon-zhankaianniu ${showDetail? "arrow-up": "arrow-down"}`} onClick={() => this.setState({'showDetail': !showDetail})}></i>
+                    <i className={`f-fr icon iconfont icon-zhankaianniu ${showDetail? "arrow-up": "arrow-down"}`}></i>
                     <i className="f-fr f-hide2 icon iconfont icon-shanchu1" onClick={this.showConfirm.bind(this, id)}></i>
                     <i className="f-fr f-hide2 icon iconfont icon-fuzhi" onClick={()=>unitAction.addUnit(data.get('type'))}></i>
                     <i className="f-fr f-hide2 icon iconfont icon-yidong"></i>

@@ -7,7 +7,7 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");  //css单独打�
 var progressBarPlugin = require('progress-bar-webpack-plugin');
 
 module.exports = {
-    devtool: 'eval-source-map',
+    devtool: 'cheap-module-eval-source-map',
 
     entry: __dirname + '/src/index.js', //唯一入口文件
     output: {

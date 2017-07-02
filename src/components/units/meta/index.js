@@ -24,7 +24,7 @@ class UnitMeta extends React.Component {
         const { showDetail } = this.state;
         return (
             <div className="unit-common unit-meta">
-            	<div className="header f-cb" onClick={() => this.setState({'showDetail': !showDetail})}>
+            	    <div className="header f-cb" onClick={(e) => !e.target.className.indexOf('header') && this.setState({'showDetail': !showDetail})}>
                     <span className="f-fl">{data.get('name')}</span>
                     <i className={`f-fr icon iconfont icon-zhankaianniu ${showDetail? "arrow-up": "arrow-down"}`}></i>
                 </div>
