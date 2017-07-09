@@ -4,7 +4,7 @@
   "private": true,
   "description": "立马理财页面制作工具项目",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development && webpack-dev-server --devtool --progress",
+    "dev": "cross-env NODE_ENV=development && webpack-dev-server --devtool --inline --progress --color --hot",
     "server": "supervisor ./server/www",
     "build": "cross-env NODE_ENV=production && webpack -p"
   },
