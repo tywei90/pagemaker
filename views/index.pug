@@ -1,0 +1,20 @@
+include ./common/docHead
+
++docHead({
+	title:'12',
+	keywords:'sdadsd',
+	description: 'asdadas',
+	cssFile: ['/stylesheets/style.css'],
+	jsFile: ['/javascripts/jquery-2.2.4.js']
+})
+
+block aaa
+	h1 #{data.title}
+	p Welcome to #{data.title}
+	p Your Login Status is #{isLogin}
+	p Your Request is #{request.header('User-Agent')}
+	#container
+		if isLogin
+			p You are amazing
+		else
+			p Get on it!

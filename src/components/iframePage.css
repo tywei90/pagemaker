@@ -1,0 +1,19 @@
+html, body {
+	margin: 0;
+	padding: 0;
+}
+html {
+    overflow-x: hidden;
+}
+section {
+	overflow-x: hidden;
+}
+#framePage .title a {
+    display: block;
+    text-decoration: none;
+}
+
+#framePage .image img {
+    width: 100%;
+    display: block;
+}

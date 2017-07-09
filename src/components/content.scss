@@ -1,0 +1,24 @@
+@import "./mixin";
+
+.m-content{
+	width: 65%;
+	text-align: left;
+	margin-left: 10px;
+	border: 1px solid #d6e9c6;
+	border-radius: 5px;
+	font-size: 16px;
+	>div{
+		background-color: #dff0d8;
+		padding: 10px 15px;
+	    border-bottom: 1px solid transparent;
+	    border-top-left-radius: 5px;
+	    border-top-right-radius: 5px;
+	    color: #3c763d;
+	    span{
+	    	color: #337ab7;
+	    }
+	}
+	>ul>li{
+		@include unitCommon;
+	}
+}
