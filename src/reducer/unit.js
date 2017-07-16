@@ -97,6 +97,17 @@ function reducer(state = initialState, action) {
             // console.table(newState.toJS());
             break
         }
+        case 'Clear': {
+            newState = initialState;
+            // console.table(newState.toJS());
+            break
+        }
+        case 'Insert': {
+            // console.log(action.data)
+            newState = immutable.fromJS(action.data);
+            // console.table(newState.toJS());
+            break
+        }
         default:
             newState = state;
     }

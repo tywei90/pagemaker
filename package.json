@@ -77,6 +77,7 @@
     "remote-redux-devtools": "^0.5.5",
     "serve-favicon": "~2.3.0",
     "shelljs": "^0.7.5",
-    "through2": "^2.0.3"
+    "through2": "^2.0.3",
+    "whatwg-fetch": "^2.0.3"
   }
 }

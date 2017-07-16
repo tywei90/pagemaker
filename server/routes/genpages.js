@@ -5,7 +5,8 @@ var Promise = require("bluebird");
 
 var fs = Promise.promisifyAll(require("fs"));
 var env = require('../env.js');
-
+var request = require('request');
+var dir = require('../common/dir.js');
 
 router.param(['id', 'page'], function(req, res, next, value) {
     console.log('CALLED ONLY ONCE with', value);
@@ -25,8 +26,47 @@ router.get('/', function(req, res, next) {
     });
 });
 
-/* 图片上传接口 */
+/* 文件上传接口 */
 router.post('/upload', require('../common/upload'));
+
+/* 文件下载接口 */
+router.post('/download', function(req, res, next) {
+    var basepath = './files/download/';
+    var randNum = Math.random().toString(16).slice(2);
+    var filename = 'config.json';
+    var filepath = basepath + randNum + ".json";
+    var data = JSON.stringify(req.body);
+    // console.log(req.body);
+    //创建目录
+    dir.mkdirsSync(basepath);
+    fs.writeFile(filepath, data, function(err) {
+        if(err) console.log(err);
+        res.json({
+            filepath: filepath,
+            retcode: 200,
+            retdesc: '下载成功'
+        });
+        // express的方法不好使
+        // res.download(filepath, filename, function(err){
+        //     if(err) console.log(err);
+        //     fs.unlinkSync(filepath);
+        // }); 
+
+    });
+});
+
+
+/* 文件删除接口 */
+router.post('/delete', function(req, res, next) {
+    var filepath = JSON.stringify(req.body);
+    fs.unlinkSync(filepath);
+    res.json({
+        retcode: 200,
+        retdesc: '删除成功'
+    });
+});
+
+
 /* 获取pagemake页面. */
 router.get('/preview/:product/:name/', function(req, res, next) {
     var product = req.params.product,

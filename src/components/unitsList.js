@@ -21,7 +21,6 @@ class UnitsList extends React.Component {
                     <li onClick={this.handleClick.bind(this, 'TITLE')}>标题</li>
                     <li onClick={this.handleClick.bind(this, 'IMAGE')}>图片</li>
                     <li onClick={this.handleClick.bind(this, 'BUTTON')}>按钮</li>
-                    <li onClick={this.handleClick.bind(this, 'TEXTBODY')}>正文</li>
                 </ul>
             </section>
         );

@@ -36,7 +36,7 @@ class UnitMeta extends React.Component {
                                 className="f-fr"
                 				type="text"
     		                    placeholder="页面标题"
-                                defaultValue={data.get('title')}
+                                value={data.get('title')}
                                 ref="title"
     		                    onChange={()=>unitAction.editUnit(id, 'title', this.refs.title.value)}
                 			/>
@@ -47,7 +47,7 @@ class UnitMeta extends React.Component {
                                 className="f-fr"
                 				type="text"
     		                    placeholder="页面关键词"
-                                defaultValue={data.get('keywords')}
+                                value={data.get('keywords')}
                                 ref="keywords"
     		                    onChange={()=>unitAction.editUnit(id, 'keywords', this.refs.keywords.value)}
                 			/>
@@ -58,7 +58,7 @@ class UnitMeta extends React.Component {
                                 className="f-fr"
                 				type="text"
     		                    placeholder="页面描述"
-                                defaultValue={data.get('desc')}
+                                value={data.get('desc')}
                                 ref="desc"
     		                    onChange={()=>unitAction.editUnit(id, 'desc', this.refs.desc.value)}
                 			/>
@@ -70,7 +70,7 @@ class UnitMeta extends React.Component {
                                 className="f-fr"
                                 type="text"
                                 placeholder="页面背景"
-                                defaultValue={data.get('bgColor')}
+                                value={data.get('bgColor')}
                                 ref="bgColor"
                                 onChange={()=>unitAction.editUnit(id, 'bgColor', this.refs.bgColor.value)}
                             />

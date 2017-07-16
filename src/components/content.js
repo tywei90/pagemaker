@@ -3,10 +3,12 @@ import { connect } from 'react-redux';
 import autoBind from 'autobind-decorator';
 import pureRender from 'pure-render-decorator';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { Modal, Upload, message } from 'antd';
 
 import './content.scss';
 
 import unit from '../action/unit';
+import unitAction from '../action/unit';
 
 import UnitMeta from './units/meta/index'
 import UnitOgp from './units/ogp/index'
@@ -16,11 +18,13 @@ import UnitButton from './units/button/index'
 import UnitTextBody from './units/textbody/index'
 import Preview from './preview.js'
 
+import 'whatwg-fetch'
+
 const renderUnits = units => {
     return units.map((item, index) => {
         switch (item.get('type')) {
             case 'META' :
-                return <li key={index}><UnitMeta id={index} data={item} /></li>
+                return <li key={index}><UnitMeta id={index} data={item} num={Math.random()}/></li>
             case 'OGP' :
                 return <li key={index}><UnitOgp id={index} data={item} /></li>
             case 'TITLE' :
@@ -40,16 +44,80 @@ class Content extends React.Component {
     static propTypes = {
         unit: ImmutablePropTypes.list,
     };
-
+    constructor(props){
+        super(props);
+        this.state = {
+            uploadProps : {
+                name: 'file',
+                action: '/genpages/upload',
+                accept: '.json',
+                headers: {
+                    authorization: 'authorization-text',
+                },
+                onChange(info) {
+                    unitAction.clear();
+                    if (info.file.status !== 'uploading') {
+                        console.log('正在导入...');
+                    }
+                    if (info.file.status === 'done') {
+                        console.log('导入完成！');
+                        if(info.file.response.file.ok){
+                            console.log(info.file.response.file.data);
+                            unitAction.insert(info.file.response.file.data);
+                            message.success(`${info.file.name} 导入成功！`);
+                        }else{
+                            message.error(`${info.file.response.file.des}，导入失败！`);
+                        }
+                    } else if (info.file.status === 'error') {
+                        console.log('导入失败！');
+                        message.error(`${info.file.name} 导入失败！`);
+                    }
+                }
+            }
+        }
+    }
+    download(){
+        var config = JSON.parse(localStorage.getItem('config') || '');
+        fetch('/genpages/download', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(config)
+        })
+        .then(response => response.json())
+        .then(data => {
+            var a = document.createElement('a');
+            a.href = data.filepath;
+            a.download = 'config.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            return data
+        })
+        // .then((data) => {
+        //     fetch('/genpages/delete', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify(data.filepath)
+        //     })
+        // })
+        .catch(e => console.log("Oops, error", e))
+    }
     render() {
         const { unit } = this.props;
+        const { uploadProps } = this.state;
         return (
             <section className="m-content f-fl">
                 <div>
                     内容配置区(
-                    <span className="J_insert">导入</span>|
-                    <span className="J_output">导出</span>|
-                    <span className="J_clear">清空</span>)
+                    <span className="J_insert">
+                        <Upload {...uploadProps}>导入</Upload>
+                    </span>|
+                    <span className="J_output" onClick={this.download}>导出</span>|
+                    <span className="J_clear" onClick={unitAction.clear}>清空</span>)
                 </div>
                 <ul>
                     {renderUnits(unit)}

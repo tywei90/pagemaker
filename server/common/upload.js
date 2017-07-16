@@ -123,7 +123,6 @@ module.exports = function(req, res) {
 			file.resume();
 			return;
 		}
-
 		//文件传输中
 		file.on('data', function(data) {
 			uploadLen += data.length;
@@ -165,6 +164,16 @@ module.exports = function(req, res) {
 	//返回json处理结果
 	busboy.on('finish', function() {
 		// console.log("busboy finish!!")
+		// 读取到的json返回到客户端
+		if(ret['file'].url.indexOf('json') != -1){
+			fs.readFile(path.join('./', ret['file'].url), 'utf8', function (err, data) {
+		        if(err) console.log(err);
+		        var parseData = JSON.parse(data);
+		        ret['file'].data = parseData;
+		        return taskComplete(res, ret);
+			});
+			return
+		}
 		//批量压缩图片
 		if (ctrl.minify === "1") {
 			if (!minFiles.length) {
