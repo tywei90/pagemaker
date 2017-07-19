@@ -19,6 +19,7 @@ class UnitButton extends React.Component {
         super(props);
         this.state = {
             showDetail: true,
+            defaultStyle: true,
             uploadProps : {
                 name: 'file',
                 action: '/genpages/upload',
@@ -57,9 +58,9 @@ class UnitButton extends React.Component {
     }
     render() {
         const { data, id } = this.props;
-        const { showDetail, uploadProps } = this.state;
+        const { showDetail, uploadProps, defaultStyle} = this.state;
         return (
-            <div className="unit-common unit-button">
+            <div className="unit-common unit-button" data-id={Math.random()}>
                 <div className="header f-cb" onClick={(e) => !e.target.className.indexOf('header') && this.setState({'showDetail': !showDetail})}>
                     <i className="f-fl f-hide2 icon iconfont icon-iconfontbi"></i>
                     <input 
@@ -76,8 +77,52 @@ class UnitButton extends React.Component {
                 </div>
                 <div className={`content ${showDetail? "show-detail": "hide-detail"}`}>
                     <ul>
-                        <li className="f-cb">
-                            <label className="f-fl">图片地址</label>
+                        <li>
+                            <label className="f-fl">按钮类型</label>
+                            <ul className="f-fr">
+                              <li className="f-fl">
+                                <input
+                                    className=""
+                                    name={`buttonType${id}`}
+                                    id={`default${id}`}
+                                    type="radio"
+                                    value='default'
+                                    ref="default"
+                                    checked={this.state.defaultStyle}
+                                    onChange={() => this.setState({'defaultStyle': !defaultStyle})}
+                                />
+                                <label htmlFor={`default${id}`}>内置样式</label>
+                              </li>
+                              <li className="f-fl">
+                                <input
+                                    className=""
+                                    name={`buttonType${id}`}
+                                    id={`custome${id}`}
+                                    type="radio"
+                                    value='custome'
+                                    ref="custome"
+                                    checked={!this.state.defaultStyle}
+                                    onChange={() => this.setState({'defaultStyle': !defaultStyle})}
+                                />
+                                <label htmlFor={`custome${id}`}>自定义图片</label>
+                              </li>
+                            </ul>
+                        </li>
+                        {/* 内置样式 */}
+                        <li className={`${defaultStyle? "show-default" : "f-hide"}`}>
+                            <label className="f-fl">按钮文字</label>
+                            <input 
+                                className="f-fr"
+                                type="text"
+                                placeholder="按钮上显示的文字"
+                                value={data.get('txt')}
+                                ref="txt"
+                                onChange={()=>unitAction.editUnit(id, 'txt', this.refs.txt.value)}
+                            />
+                        </li>
+                        {/* 自定义图片 */}
+                        <li className={`${!defaultStyle? "show-default" : "f-hide"}`}>
+                            <label className="f-fl">按钮图片</label>
                             <input 
                                 className="f-fr"
                                 type="text"
@@ -103,76 +148,72 @@ class UnitButton extends React.Component {
                                 onChange={()=>unitAction.editUnit(id, 'url', this.refs.url.value)}
                             />
                         </li>
-                        <li className="f-cb">
-                            <label className="f-fl">填充色</label>
+                        <li>
+                            <label className="f-fl">APP命令</label>
                             <input 
-                                style={{background:data.get('bgColor')}}
                                 className="f-fr"
                                 type="text"
-                                placeholder="填充色"
-                                defaultValue={data.get('bgColor')}
-                                ref="bgColor"
-                                onChange={()=>unitAction.editUnit(id, 'bgColor', this.refs.bgColor.value)}
+                                placeholder="客户端功能命令，仅当在内嵌客户端时生效"
+                                value={data.get('appOrder')}
+                                rel="appOrder"
+                                onChange={()=>unitAction.editUnit(id, 'appOrder', this.refs.appOrder.value)}
                             />
                         </li>
-                        <li className="f-cb">
-                            <label className="f-fl">组件内边距</label>
+                        <li className={`${defaultStyle? "show-default" : "hide-default"}`}>
+                            <label className="f-fl">配色</label>
                             <ul className="f-fr">
-                                <li className="f-fl label-left">
-                                    <label>上</label>
+                              <li className="f-fl">
+                                <input
+                                    name={`buttonStyle${id}`}
+                                    id={`redStyle${id}`}
+                                    type="radio"
+                                    value='redStyle'
+                                    ref="redStyle"
+                                    checked={data.get('buttonStyle') === "redStyle"}
+                                    onChange={()=>unitAction.editUnit(id, 'buttonStyle', this.refs.redStyle.value)}
+                                />
+                                <label htmlFor={`redStyle${id}`}>红色</label>
+                              </li>
+                              <li className="f-fl">
+                                <input
+                                    name={`buttonStyle${id}`}
+                                    id={`yellowStyle${id}`}
+                                    type="radio"
+                                    value='yellowStyle'
+                                    ref="yellowStyle"
+                                    checked={data.get('buttonStyle') === "yellowStyle"}
+                                    onChange={()=>unitAction.editUnit(id, 'buttonStyle', this.refs.yellowStyle.value)}
+                                />
+                                <label htmlFor={`yellowStyle${id}`}>黄色</label>
+                              </li>
+                              <li className="f-fl">
+                                <input
+                                    name={`buttonStyle${id}`}
+                                    id={`blueStyle${id}`}
+                                    type="radio"
+                                    value='blueStyle'
+                                    ref="blueStyle"
+                                    checked={data.get('buttonStyle') === "blueStyle"}
+                                    onChange={()=>unitAction.editUnit(id, 'buttonStyle', this.refs.blueStyle.value)}
+                                />
+                                <label htmlFor={`blueStyle${id}`}>蓝色</label>
+                              </li>
+                            </ul>
+                        </li>
+                        {/* 内置样式 */}
+                        <li className={`${defaultStyle? "show-default" : "hide-default"}`}>
+                            <label className="f-fl">其他</label>
+                            <ul className="f-fr">
+                                <li className="f-fl">
                                     <input 
-                                        type="text" 
-                                        ref="paddingTop"
-                                        defaultValue={data.getIn(['padding', 0])}
-                                        onChange={()=>unitAction.editUnit(id, 'padding', immutable.fromJS([
-                                            parseFloat(this.refs.paddingTop.value) || 0,
-                                            parseFloat(this.refs.paddingRight.value) || 0,
-                                            parseFloat(this.refs.paddingBottom.value) || 0,
-                                            parseFloat(this.refs.paddingLeft.value) || 0
-                                        ]))}
+                                        name={`bigRadius${id}`}
+                                        id={`bigRadius${id}`}
+                                        ref="bigRadius"
+                                        type="checkbox"
+                                        checked={data.get('bigRadius') }
+                                        onChange={()=>unitAction.editUnit(id, 'bigRadius', this.refs.bigRadius.checked)}
                                     />
-                                </li>
-                                <li className="f-fl label-left">
-                                    <label>右</label>
-                                    <input 
-                                        type="text" 
-                                        ref="paddingRight"
-                                        defaultValue={data.getIn(['padding', 1])}
-                                        onChange={()=>unitAction.editUnit(id, 'padding', immutable.fromJS([
-                                            parseFloat(this.refs.paddingTop.value) || 0,
-                                            parseFloat(this.refs.paddingRight.value) || 0,
-                                            parseFloat(this.refs.paddingBottom.value) || 0,
-                                            parseFloat(this.refs.paddingLeft.value) || 0
-                                        ]))}
-                                    />
-                                </li>
-                                <li className="f-fl label-left">
-                                    <label>下</label>
-                                    <input 
-                                        type="text" 
-                                        ref="paddingBottom"
-                                        defaultValue={data.getIn(['padding', 2])}
-                                        onChange={()=>unitAction.editUnit(id, 'padding', immutable.fromJS([
-                                            parseFloat(this.refs.paddingTop.value) || 0,
-                                            parseFloat(this.refs.paddingRight.value) || 0,
-                                            parseFloat(this.refs.paddingBottom.value) || 0,
-                                            parseFloat(this.refs.paddingLeft.value) || 0
-                                        ]))}
-                                    />
-                                </li>
-                                <li className="f-fl label-left">
-                                    <label>左</label>
-                                    <input 
-                                        type="text" 
-                                        ref="paddingLeft"
-                                        defaultValue={data.getIn(['padding', 3])}
-                                        onChange={()=>unitAction.editUnit(id, 'padding', immutable.fromJS([
-                                            parseFloat(this.refs.paddingTop.value) || 0,
-                                            parseFloat(this.refs.paddingRight.value) || 0,
-                                            parseFloat(this.refs.paddingBottom.value) || 0,
-                                            parseFloat(this.refs.paddingLeft.value) || 0
-                                        ]))}
-                                    />
+                                    <label htmlFor={`bigRadius${id}`}>大圆角</label>
                                 </li>
                             </ul>
                         </li>

@@ -39,9 +39,15 @@ const unitsConfig = immutable.fromJS({
         name: '按钮',
         address: '',
         url: '',
-        bgColor: '#fff',
-        padding: [0, 0, 0, 0],
-        margin: [0, 30, 24, 30]
+        txt: '',
+        margin: [
+            0, 30, 24, 30
+        ],
+        appOrder: '',
+        buttonStyle: "redStyle",
+        bigRadius: '',
+        address: '',
+        defaultStyle: "true"
     },
     TEXTBODY: {
         type: 'TEXTBODY',
@@ -111,6 +117,7 @@ function reducer(state = initialState, action) {
         default:
             newState = state;
     }
+    // console.log(newState.toJS());
     // 更新localstorage，便于恢复现场
     localStorage.setItem('config', JSON.stringify(newState.toJS()));
     return newState

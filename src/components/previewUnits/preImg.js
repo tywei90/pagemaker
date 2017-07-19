@@ -7,9 +7,11 @@ import pureRender from 'pure-render-decorator';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import immutable from 'immutable';
 
+@pureRender
 class PreImg extends React.Component {
 	static propTypes = {
-        data: ImmutablePropTypes.map
+        data: ImmutablePropTypes.map,
+        id: PropTypes.number
     };
 	constructor(props){
 		super(props);
@@ -18,23 +20,23 @@ class PreImg extends React.Component {
 	}
 	render() {
 		var style = {};
-		var localData = JSON.parse(localStorage.getItem('config'));
-		var data = localData[this.props.id];
+		const { data } = this.props;
+		let jsdata = data.toJS();
 		style = {
-			backgroundColor: data.bgColor,
-			marginTop: data.margin[0],
-			marginRight: data.margin[1],
-			marginBottom: data.margin[2],
-			marginLeft: data.margin[3],
-			paddingTop: data.padding[0],
-			paddingRight: data.padding[1],
-			paddingBottom: data.padding[2],
-			paddingLeft: data.padding[3]
+			backgroundColor: jsdata.bgColor,
+			marginTop: jsdata.margin[0],
+			marginRight: jsdata.margin[1],
+			marginBottom: jsdata.margin[2],
+			marginLeft: jsdata.margin[3],
+			paddingTop: jsdata.padding[0],
+			paddingRight: jsdata.padding[1],
+			paddingBottom: jsdata.padding[2],
+			paddingLeft: jsdata.padding[3]
 		};
 		return (
-			<section className={`image`} style={style}>
-				<a href= {data.url}>
-					<img src={data.address} />	
+			<section className={`image`} style={style} data-id={Math.random()}>
+				<a href= {jsdata.url}>
+					<img src={jsdata.address} />	
 				</a>			
 			</section>
 		)

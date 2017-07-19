@@ -7,7 +7,6 @@ import { Modal, Upload, message } from 'antd';
 
 import './content.scss';
 
-import unit from '../action/unit';
 import unitAction from '../action/unit';
 
 import UnitMeta from './units/meta/index'
@@ -24,7 +23,7 @@ const renderUnits = units => {
     return units.map((item, index) => {
         switch (item.get('type')) {
             case 'META' :
-                return <li key={index}><UnitMeta id={index} data={item} num={Math.random()}/></li>
+                return <li key={index}><UnitMeta id={index} data={item} /></li>
             case 'OGP' :
                 return <li key={index}><UnitOgp id={index} data={item} /></li>
             case 'TITLE' :

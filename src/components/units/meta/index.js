@@ -63,7 +63,7 @@ class UnitMeta extends React.Component {
     		                    onChange={()=>unitAction.editUnit(id, 'desc', this.refs.desc.value)}
                 			/>
                 		</li>
-                        <li className="f-cb">
+                        <li className="f-cb" style={{'display': 'none'}}>
                             <label className="f-fl">页面背景</label>
                             <input 
                                 style={{background:data.get('bgColor')}}

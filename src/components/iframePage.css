@@ -1,13 +1,27 @@
-html, body {
-	margin: 0;
-	padding: 0;
+
+#framePage html,
+#framePage body,
+#framePage div,
+#framePage h5,
+#framePage h6,
+#framePage p,
+#framePage ul,
+#framePage li {
+    margin: 0px;
+    padding: 0px;
 }
+
 html {
     overflow-x: hidden;
 }
-section {
-	overflow-x: hidden;
+body{
+    padding: 0;
+    margin: 0;
 }
+section {
+    overflow-x: hidden;
+}
+
 #framePage .title a {
     display: block;
     text-decoration: none;
@@ -16,4 +30,82 @@ section {
 #framePage .image img {
     width: 100%;
     display: block;
+}
+#framePage .image p{
+    position: absolute;
+	bottom: 0;
+	height: 2rem;
+	line-height: 2rem;
+	width: 100%;
+	text-align: center;
+	background: #666;
+	color: #fff;
+	opacity: 0.6;
+}
+#framePage button {
+    width: 100%;
+    height: 3rem;
+    line-height: 3rem;
+    text-align: center;
+    font-size: 1rem;
+    border: 0;
+    border-radius: 4px;
+    padding: 0;
+}
+
+button {
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+a {
+    text-decoration: none;
+}
+
+em,
+i {
+    font-style: normal;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.f-cb {
+    display: block;
+    zoom: 1
+}
+
+.f-cb:after {
+    content: " ";
+    display: block;
+    font-size: 0;
+    height: 0;
+    clear: both;
+    visibility: hidden
+}
+
+.f-fl {
+    float: left
+}
+
+.f-fr {
+    float: right
+}
+
+.f-hide {
+    display: none
+}
+
+.f-hide2 {
+    visibility: hidden
+}
+
+.f-hide3 {
+    position: absolute;
+    left: -99999px;
+    top: -99999px
 }
