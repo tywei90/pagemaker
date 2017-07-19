@@ -76,6 +76,15 @@ class Content extends React.Component {
             }
         }
     }
+    clearSettings(){
+        Modal.confirm({
+            title: '确认清空所有配置?',
+            onOk() {
+                unitAction.clear();
+            },
+            onCancel() {}
+        });
+    }
     download(){
         var config = JSON.parse(localStorage.getItem('config') || '');
         fetch('/genpages/download', {
@@ -117,7 +126,7 @@ class Content extends React.Component {
                         <Upload {...uploadProps}>导入</Upload>
                     </span>|
                     <span className="J_output" onClick={this.download}>导出</span>|
-                    <span className="J_clear" onClick={unitAction.clear}>清空</span>)
+                    <span className="J_clear" onClick={this.clearSettings}>清空</span>)
                 </div>
                 <ul>
                     {renderUnits(unit)}
