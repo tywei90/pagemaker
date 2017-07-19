@@ -168,8 +168,27 @@ module.exports = function(req, res) {
 		if(ret['file'].url.indexOf('json') != -1){
 			fs.readFile(path.join('./', ret['file'].url), 'utf8', function (err, data) {
 		        if(err) console.log(err);
+				try{
+                    JSON.parse(data)
+                }
+                catch(err){
+                    ret['file'] = {
+                        ok: false,
+                        err: 1,
+                        des: "json文件格式错误"
+                    }
+                    return taskComplete(res, ret);
+                }
 		        var parseData = JSON.parse(data);
-		        ret['file'].data = parseData;
+		        if(Array.isArray(parseData) && parseData[0].type == 'META'){
+                    ret['file'].data = parseData;
+                }else{
+                    ret['file'] = {
+                        ok: false,
+                        err: 2,
+                        des: "非有效的pagemaker配置文件"
+                    }
+                }
 		        return taskComplete(res, ret);
 			});
 			return
