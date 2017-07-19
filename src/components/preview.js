@@ -1,6 +1,3 @@
-/**
- * Created by bjshensiqi on 2017/1/10.
- */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import autoBind from 'autobind-decorator';

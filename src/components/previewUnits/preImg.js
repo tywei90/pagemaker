@@ -1,6 +1,3 @@
-/**
- * Created by bjshensiqi on 2017/2/14.
- */
 import React, { PropTypes } from 'react';
 import autoBind from 'autobind-decorator';
 import pureRender from 'pure-render-decorator';
