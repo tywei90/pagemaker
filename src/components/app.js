@@ -19,12 +19,11 @@ class App extends React.Component {
     componentDidMount() {
         
     }
-
     render() {
         
         return (
             <div className="window">
-                <Header name='lmlc'/>
+                <Header />
                 <div className="m-body f-cb">
                     <UnitsList />
                     <Content />
