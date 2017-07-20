@@ -18,7 +18,7 @@ class UnitTitle extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            showDetail: true
+            showDetail: false
         } 
     }
     showConfirm(id) {
@@ -36,7 +36,7 @@ class UnitTitle extends React.Component {
         return (
             <div className="unit-common unit-title" id={id}>
                 <div className="header f-cb" onClick={(e) => !e.target.className.indexOf('header') && this.setState({'showDetail': !showDetail})}>
-                    <i className="f-fl f-hide2 icon iconfont icon-iconfontbi"></i>
+                    <i className="f-fl f-hide2 icon iconfont icon-iconfontbi" onClick={() => this.refs.name.focus()}></i>
                     <input 
                         className="f-fl"
                         type="text"

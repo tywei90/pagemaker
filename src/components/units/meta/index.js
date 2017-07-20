@@ -16,7 +16,7 @@ class UnitMeta extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            showDetail: true
+            showDetail: false
         } 
     }
     render() {

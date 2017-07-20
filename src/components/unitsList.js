@@ -13,7 +13,15 @@ class UnitsList extends React.Component {
 
     };
     handleClick(name){
-        unitAction.addUnit(name)
+        unitAction.addUnit(name);
+        this.success();
+    }
+    success() {
+        const modal = Modal.success({
+            title: '温馨提示',
+            content: '组件添加成功!',
+        });
+        setTimeout(() => modal.destroy(), 1000);
     }
     info() {
       Modal.info({

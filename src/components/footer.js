@@ -7,7 +7,7 @@ let Footer = React.createClass({
     render() {
         return (
             <footer>
-                 <div class="copyright">&copy;2017-2018 Tianyao Wei, tywei90@163.com</div>
+                 <div className="copyright">&copy;2017-2018 Tianyao Wei, tywei90@163.com</div>
             </footer>
         );
     }
