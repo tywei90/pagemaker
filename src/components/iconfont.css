@@ -34,7 +34,11 @@
 
 .icon-iconfonth:before { content: "\e608"; }
 
+.icon-x-rmvb:before { content: "\e68e"; }
+
 .icon-fuxuangougou:before { content: "\e610"; }
+
+.icon-daima:before { content: "\e65d"; }
 
 .icon-zhankaianniu:before { content: "\e603"; }
 
@@ -56,7 +60,13 @@
 
 .icon-jian:before { content: "\e607"; }
 
+.icon-yinpin:before { content: "\e620"; }
+
 .icon-yidong:before { content: "\e655"; }
 
 .icon-anniu:before { content: "\e62d"; }
+
+.icon-zhengwen:before { content: "\e6e3"; }
+
+.icon-tongji:before { content: "\e716"; }
 

@@ -19,15 +19,22 @@ header{
 		a{
 			display: inline-block;
 			width: 120px;
-			color: white;
+			color: #999;
 			cursor: pointer;
 		}
 		.active{
+			color: #fff;
 			background: #000;
-			border-radius: 10px;
 		}
 	}
 	.user{
 		padding-right: 100px;
+		a{
+			color: #fff;
+			cursor: pointer;
+		}
+		a:hover{
+			color: #f6cf6e;
+		}
 	}
 }

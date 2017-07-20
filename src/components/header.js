@@ -19,11 +19,11 @@ class Header extends React.Component {
                 <div className="icon iconfont icon-fire f-fl"></div>
                 <div className="links f-fl">
                     <a className="active" href="/genpages">pagemaker</a>
-                    <a href="/genpages">直邮工具</a>
-                    <a href="/genpages">动效页</a>
+                    <a href="/email">直邮工具</a>
+                    <a href="/h5">动效页</a>
                 </div>
                 <div className="user f-fr">
-                    <span>您好，{this.props.name}</span>
+                    <a href="/users">您好，{this.props.name}</a>
                 </div>
             </header>
         );
