@@ -37,7 +37,7 @@ class Header extends React.Component {
         const {username} = this.state;
         return (
             <header className="f-cb">
-                <div className="icon iconfont icon-fire f-fl"></div>
+                <a href="/" className="goHome icon iconfont icon-fire f-fl"></a>
                 <div className="links f-fl">
                     <a className="active" href="/genpages">pagemaker</a>
                     <a href="/email">直邮工具</a>

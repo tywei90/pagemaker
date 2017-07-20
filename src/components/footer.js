@@ -7,7 +7,7 @@ let Footer = React.createClass({
     render() {
         return (
             <footer>
-                <div className="copyright">&copy;光大易创网络科技股份有限公司版权所有 沪ICP备15046107号</div>
+                 <div class="copyright">&copy;2017-2018 Tianyao Wei, tywei90@163.com</div>
             </footer>
         );
     }
