@@ -63,13 +63,15 @@ class Preview extends React.Component {
 							'<body style="background-color: '+ data.bgColor +
 							'"><div id="framePage"></div></body></html>';
 		return (
-			<Frame  className="m-preview f-fl" 
-  					initialContent= {initialContent}
-  					contentDidUpdate={console.log('contentDidUpdate')}
-  					contentDidMount={console.log('contentDidMount')}
-  					mountTarget='#framePage' data-id={Math.random()}>
-				{renderUnits(unit)}
-			</Frame>
+			<div className="m-preview">
+				<Frame  className="iframe" 
+	  					initialContent= {initialContent}
+	  					contentDidUpdate={console.log('contentDidUpdate')}
+	  					contentDidMount={console.log('contentDidMount')}
+	  					mountTarget='#framePage' data-id={Math.random()}>
+					{renderUnits(unit)}
+				</Frame>
+			</div>
 		);
 	}
 }

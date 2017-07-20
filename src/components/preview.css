@@ -1,8 +1,18 @@
 .m-preview {
-    background-color: #82b1ff;
     border: 0;
-    height: 551px;
+    width: 371px;
+    height: 775px;
+    position: fixed;
+    right: 5%;
+    top: 50%;
+    margin-top: -388px;
+    background: url(../img/iphone.png) center /100% no-repeat;
+}
+iframe{
     width: 320px;
-    margin-left: 50px;
-    margin-top: 50px;
+	height: 549px;
+    position: absolute;
+	top: 109px;
+	left: 23px;
+	overflow: hidden;
 }

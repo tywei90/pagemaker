@@ -59,7 +59,7 @@ class UnitImage extends React.Component {
         const { data, id } = this.props;
         const { showDetail, uploadProps } = this.state;
         return (
-            <div className="unit-common unit-image">
+            <div className="unit-common unit-image" data-id={Math.random()}>
                 <div className="header f-cb" onClick={(e) => !e.target.className.indexOf('header') && this.setState({'showDetail': !showDetail})}>
                     <i className="f-fl f-hide2 icon iconfont icon-iconfontbi"></i>
                     <input 

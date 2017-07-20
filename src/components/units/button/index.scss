@@ -5,4 +5,8 @@
 	.low-height{
 		height: 260px;
 	}
+	.hide-detail{
+		height: 0;
+	    transition: height 0.3s;
+	}
 }
