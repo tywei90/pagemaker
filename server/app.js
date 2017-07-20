@@ -8,6 +8,8 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var genpages = require('./routes/genpages');
+var email = require('./routes/email');
+var h5 = require('./routes/h5');
 
 
 var app = express();
@@ -32,8 +34,10 @@ app.use('/src', express.static(path.join(__dirname, '../src')));
 
 
 app.use('/', index);
-app.use('/users', users);
 app.use('/genpages', genpages);
+app.use('/users', users);
+app.use('/email', email);
+app.use('/h5', h5);
 
 
 
@@ -52,8 +56,16 @@ app.use(function(err, req, res, next) {
     res.locals.error = req.app.get('env') === 'development' ? err : {};
 
     // render the error page
-    res.status(err.status || 500);
-    res.render('error');
+    // res.status(err.status || 500);
+    res.render('error', {
+        data: {
+            title: '访问地址错误'
+        },
+        request: req,
+        isLogin: true,
+        retcode: 400,
+        retdesc: '访问地址错误'
+    });
 });
 
 module.exports = app;

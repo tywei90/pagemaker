@@ -3,14 +3,14 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', {
+    res.render('h5', {
         data: {
-            title: '前端工具集首页'
+            title: '动效页'
         },
         request: req,
         isLogin: true,
         retcode: 200,
-        retdesc: '前端工具集首页'
+        retdesc: '动效页'
     });
 });
 

@@ -66,6 +66,18 @@ router.post('/delete', function(req, res, next) {
     });
 });
 
+/* 用户信息接口 */
+router.get('/username', function(req, res, next) {
+    // 查询数据库代码...
+    res.json({
+        data:{
+            username: '魏天尧'
+        },
+        retcode: 200,
+        retdesc: '请求成功'
+    });
+});
+
 
 /* 获取pagemake页面. */
 router.get('/preview/:product/:name/', function(req, res, next) {
