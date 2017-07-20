@@ -47,7 +47,7 @@ const unitsConfig = immutable.fromJS({
         buttonStyle: "redStyle",
         bigRadius: '',
         address: '',
-        defaultStyle: "true"
+        style: 'default'
     },
     TEXTBODY: {
         type: 'TEXTBODY',

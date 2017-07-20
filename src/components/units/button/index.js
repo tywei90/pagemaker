@@ -19,7 +19,6 @@ class UnitButton extends React.Component {
         super(props);
         this.state = {
             showDetail: true,
-            defaultStyle: true,
             uploadProps : {
                 name: 'file',
                 action: '/genpages/upload',
@@ -58,7 +57,7 @@ class UnitButton extends React.Component {
     }
     render() {
         const { data, id } = this.props;
-        const { showDetail, uploadProps, defaultStyle} = this.state;
+        const { showDetail, uploadProps} = this.state;
         return (
             <div className="unit-common unit-button" data-id={Math.random()}>
                 <div className="header f-cb" onClick={(e) => !e.target.className.indexOf('header') && this.setState({'showDetail': !showDetail})}>
@@ -75,7 +74,7 @@ class UnitButton extends React.Component {
                     <i className="f-fr f-hide2 icon iconfont icon-fuzhi" onClick={()=>unitAction.addUnit(data.get('type'))}></i>
                     <i className="f-fr f-hide2 icon iconfont icon-yidong"></i>
                 </div>
-                <div className={`content ${showDetail? "show-detail": "hide-detail"}`}>
+                <div className={`content ${showDetail? "show-detail": "hide-detail"} ${data.get('style') == "default"? "": "low-height"}`}>
                     <ul>
                         <li>
                             <label className="f-fl">按钮类型</label>
@@ -88,8 +87,8 @@ class UnitButton extends React.Component {
                                     type="radio"
                                     value='default'
                                     ref="default"
-                                    checked={this.state.defaultStyle}
-                                    onChange={() => this.setState({'defaultStyle': !defaultStyle})}
+                                    checked={data.get('style') == "default"}
+                                    onChange={() => unitAction.editUnit(id, 'style', this.refs.default.value)}
                                 />
                                 <label htmlFor={`default${id}`}>内置样式</label>
                               </li>
@@ -101,15 +100,15 @@ class UnitButton extends React.Component {
                                     type="radio"
                                     value='custome'
                                     ref="custome"
-                                    checked={!this.state.defaultStyle}
-                                    onChange={() => this.setState({'defaultStyle': !defaultStyle})}
+                                    checked={data.get('style') == 'custome'}
+                                    onChange={() => unitAction.editUnit(id, 'style', this.refs.custome.value)}
                                 />
                                 <label htmlFor={`custome${id}`}>自定义图片</label>
                               </li>
                             </ul>
                         </li>
                         {/* 内置样式 */}
-                        <li className={`${defaultStyle? "show-default" : "f-hide"}`}>
+                        <li className={`${data.get('style') == "default"? "show-default" : "f-hide"}`}>
                             <label className="f-fl">按钮文字</label>
                             <input 
                                 className="f-fr"
@@ -121,7 +120,7 @@ class UnitButton extends React.Component {
                             />
                         </li>
                         {/* 自定义图片 */}
-                        <li className={`${!defaultStyle? "show-default" : "f-hide"}`}>
+                        <li className={`${data.get('style') == "custome"? "show-default" : "f-hide"}`}>
                             <label className="f-fl">按钮图片</label>
                             <input 
                                 className="f-fr"
@@ -155,11 +154,11 @@ class UnitButton extends React.Component {
                                 type="text"
                                 placeholder="客户端功能命令，仅当在内嵌客户端时生效"
                                 value={data.get('appOrder')}
-                                rel="appOrder"
+                                ref="appOrder"
                                 onChange={()=>unitAction.editUnit(id, 'appOrder', this.refs.appOrder.value)}
                             />
                         </li>
-                        <li className={`${defaultStyle? "show-default" : "hide-default"}`}>
+                        <li className={`${data.get('style') == "default"? "show-default" : "f-hide"}`}>
                             <label className="f-fl">配色</label>
                             <ul className="f-fr">
                               <li className="f-fl">
@@ -201,7 +200,7 @@ class UnitButton extends React.Component {
                             </ul>
                         </li>
                         {/* 内置样式 */}
-                        <li className={`${defaultStyle? "show-default" : "hide-default"}`}>
+                        <li className={`${data.get('style') == "default"? "show-default" : "f-hide"}`}>
                             <label className="f-fl">其他</label>
                             <ul className="f-fr">
                                 <li className="f-fl">

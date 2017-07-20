@@ -53,7 +53,6 @@ class Preview extends React.Component {
 		//初始化meta部分数据
 		var localData = unit.toJS();
 		localData = JSON.parse(JSON.stringify(localData));
-		console.log(localData[0]);
 		var data = localData[0];
 		var initialContent = '<!DOCTYPE html><html><head>'+ 
 								'<title>' + data.title +'</title>'+

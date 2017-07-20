@@ -32,13 +32,12 @@ class PreButton extends React.Component {
 		let btnStyle = jsdata.buttonStyle;
 		let bgColor;
 		let color;
-		if (jsdata.address) {
+		if (jsdata.style == 'custome') {
 			let background = jsdata.address;
 			color = '#333';
 			styleInner = {
 				color: color,
-				background: 'url(' + background + ') no-repeat center center',
-				backgroundSize: '100% auto',
+				background: 'url(' + background + ') no-repeat center center /100%',
 				borderRadius: 0
 			}
 		}
@@ -65,7 +64,7 @@ class PreButton extends React.Component {
 		}
 		return (
 			<section className={`button`} style={style} data-id={Math.random()}>
-				<button style={styleInner} href={jsdata.url} data-cmd={jsdata.appOrder}>{jsdata.address? " " : jsdata.txt }</button>
+				<button style={styleInner} href={jsdata.url} data-cmd={jsdata.appOrder}>{jsdata.style == 'custome'? " " : jsdata.txt }</button>
 			</section>
 		)
 	}
