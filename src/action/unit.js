@@ -8,7 +8,8 @@ const actions = {
     editUnit: (id, prop, value) => dispatch({ type: 'EditUnit', id, prop, value }),
     removeUnit: (id) => dispatch({ type: 'RemoveUnit', id }),
     clear: () => dispatch({ type: 'Clear'}),
-    insert: (data) => dispatch({ type: 'Insert', data})
+    insert: (data) => dispatch({ type: 'Insert', data}),
+    moveUnit: (fid, tid) => dispatch({ type: 'MoveUnit', fid, tid }),
 };
 
 export default actions;

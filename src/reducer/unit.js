@@ -112,6 +112,16 @@ function reducer(state = initialState, action) {
             newState = immutable.fromJS(action.data);
             break
         }
+        case 'MoveUnit':{
+            const {fid, tid} = action;
+            const fitem = state.get(fid);
+            if (fitem && fid != tid) {
+                newState = state.splice(fid, 1).splice(tid, 0, fitem); 
+            } else {
+                newState = state;
+            }
+            break;
+        }
         default:
             newState = state;
     }

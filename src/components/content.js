@@ -22,15 +22,15 @@ const renderUnits = units => {
     return units.map((item, index) => {
         switch (item.get('type')) {
             case 'META' :
-                return <li key={index}><UnitMeta id={index} data={item} /></li>
+                return <li key={index} id={index}><UnitMeta id={index} data={item} /></li>
             case 'TITLE' :
-                return <li key={index}><UnitTitle id={index} data={item} /></li>
+                return <li key={index} id={index}><UnitTitle id={index} data={item} /></li>
             case 'IMAGE' :
-                return <li key={index}><UnitImage id={index} data={item} /></li>
+                return <li key={index} id={index}><UnitImage id={index} data={item} /></li>
             case 'BUTTON' :
-                return <li key={index}><UnitButton id={index} data={item} /></li>
+                return <li key={index} id={index}><UnitButton id={index} data={item} /></li>
             case 'TEXTBODY' :
-                return <li key={index}><UnitTextBody id={index} data={item} /></li>
+                return <li key={index} id={index}><UnitTextBody id={index} data={item} /></li>
         }
     });
 };
@@ -124,7 +124,7 @@ class Content extends React.Component {
                     <span className="J_output" onClick={this.download}>导出</span>|
                     <span className="J_clear" onClick={this.clearSettings}>清空</span>)
                 </div>
-                <ul>
+                <ul id="unitMain">
                     {renderUnits(unit)}
                 </ul>
             </section>
