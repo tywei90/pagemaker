@@ -6,6 +6,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import './index.scss';
 
 import unitAction from '../../../action/unit';
+import UnitPanel from '../panel/index'; 
 
 @pureRender
 class UnitMeta extends React.Component {
@@ -15,20 +16,11 @@ class UnitMeta extends React.Component {
     };
     constructor(props){
         super(props);
-        this.state = {
-            showDetail: false
-        } 
     }
     render() {
         const { data, id } = this.props;
-        const { showDetail } = this.state;
         return (
-            <div className="unit-common unit-meta">
-            	    <div className="header f-cb" onClick={(e) => !e.target.className.indexOf('header') && this.setState({'showDetail': !showDetail})}>
-                    <span className="f-fl">{data.get('name')}</span>
-                    <i className={`f-fr icon iconfont icon-zhankaianniu ${showDetail? "arrow-up": "arrow-down"}`}></i>
-                </div>
-                <div className={`content ${showDetail? "show-detail": "hide-detail"}`}>
+            <UnitPanel id={id} type={data.get('type').toLowerCase()} unitName={data.get('name')} editable={false}>
                 	<ul>
                 		<li className="f-cb li-first">
                 			<label className="f-fl">页面标题</label>
@@ -76,8 +68,7 @@ class UnitMeta extends React.Component {
                             />
                         </li>
                 	</ul>
-                </div>
-            </div>
+            </UnitPanel>
         );
     }
 }

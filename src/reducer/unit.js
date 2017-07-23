@@ -90,34 +90,32 @@ function reducer(state = initialState, action) {
     switch (action.type) {
         case 'AddUnit': {
             newState = state.push(unitsConfig.get(action.name));
-            // console.table(newState.toJS());
+            break
+        }
+        case 'CopyUnit': {
+            newState = state.push(state.get(action.id));
             break
         }
         case 'EditUnit': {
             newState = state.setIn([action.id, action.prop], action.value);
-            // console.table(newState.toJS());
             break
         }
         case 'RemoveUnit': {
             newState = state.splice(action.id, 1);
-            // console.table(newState.toJS());
             break
         }
         case 'Clear': {
             newState = initialState;
-            // console.table(newState.toJS());
             break
         }
         case 'Insert': {
-            // console.log(action.data)
             newState = immutable.fromJS(action.data);
-            // console.table(newState.toJS());
             break
         }
         default:
             newState = state;
     }
-    // console.log(newState.toJS());
+    // console.table(newState.toJS());
     // 更新localstorage，便于恢复现场
     localStorage.setItem('config', JSON.stringify(newState.toJS()));
     return newState

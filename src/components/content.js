@@ -10,7 +10,6 @@ import './content.scss';
 import unitAction from '../action/unit';
 
 import UnitMeta from './units/meta/index'
-import UnitOgp from './units/ogp/index'
 import UnitTitle from './units/title/index'
 import UnitImage from './units/image/index'
 import UnitButton from './units/button/index'
@@ -24,8 +23,6 @@ const renderUnits = units => {
         switch (item.get('type')) {
             case 'META' :
                 return <li key={index}><UnitMeta id={index} data={item} /></li>
-            case 'OGP' :
-                return <li key={index}><UnitOgp id={index} data={item} /></li>
             case 'TITLE' :
                 return <li key={index}><UnitTitle id={index} data={item} /></li>
             case 'IMAGE' :

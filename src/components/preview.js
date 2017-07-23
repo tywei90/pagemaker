@@ -52,7 +52,6 @@ class Preview extends React.Component {
 		const { unit } = this.props;
 		//初始化meta部分数据
 		var localData = unit.toJS();
-		localData = JSON.parse(JSON.stringify(localData));
 		var data = localData[0];
 		var initialContent = '<!DOCTYPE html><html><head>'+ 
 								'<title>' + data.title +'</title>'+
@@ -66,8 +65,6 @@ class Preview extends React.Component {
 			<div className="m-preview">
 				<Frame  className="iframe" 
 	  					initialContent= {initialContent}
-	  					contentDidUpdate={console.log('contentDidUpdate')}
-	  					contentDidMount={console.log('contentDidMount')}
 	  					mountTarget='#framePage' data-id={Math.random()}>
 					{renderUnits(unit)}
 				</Frame>
