@@ -16,3 +16,10 @@ iframe{
 	left: 23px;
 	overflow: hidden;
 }
+#release{
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    font-size: 16px;
+    color: red;
+}

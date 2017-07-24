@@ -26,6 +26,21 @@ router.get('/', function(req, res, next) {
     });
 });
 
+/* 发布页面接口 */
+router.post('/release', function(req, res, next) {
+    var data = req.body;
+    var filepath = './release/' + data.name + '.html';
+    var formatData = decodeURI(data.html);
+    fs.writeFile(filepath, formatData, function(err) {
+        if(err) console.log(err);
+        res.json({
+            filepath: filepath,
+            retcode: 200,
+            retdesc: '下载成功'
+        });
+    });
+});
+
 /* 文件上传接口 */
 router.post('/upload', require('../common/upload'));
 

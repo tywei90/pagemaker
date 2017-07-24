@@ -11,7 +11,7 @@ import PreImg from './previewUnits/preImg';
 import PreTextBody from './previewUnits/preTextBody';
 import PreButton from './previewUnits/preButton';
 
-var Frame = require('react-frame-component');
+let Frame = require('react-frame-component');
 
 const renderUnits = units => {
 	return units.map((item, index) => {
@@ -48,27 +48,73 @@ class Preview extends React.Component {
 	constructor(props){
 		super(props);
 	}
+	release(){
+		let htmlContext = this.prepareData();
+		let data = {
+			html: htmlContext,
+			name: 'lmlc'
+		}
+        fetch('/genpages/release', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        // .then(response => response.json())
+        // .then(data => {
+            
+        // })
+        .catch(e => console.log("Oops, error", e))
+	}
+	prepareData(){
+		const { unit } = this.props;
+		let localData = unit.toJS();
+		let data = localData[0];
+		let iframe = document.getElementsByTagName('iframe')[0];
+		let iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+		let bodyContext = iframeDoc.getElementById("framePage").outerHTML;
+		let htmlContext = 
+			'<!DOCTYPE html>' + 
+			'<html>' + 
+				'<head>'+ 
+					'<title>' + data.title +'</title>'+
+					'<link rel="shortcut icon" href="/build/favicon.ico">' + 
+					'<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">'+
+					'<meta name="keywords" content=' + data.keywords + '>'+
+					'<meta name="description" content=' + data.desc + '>'+ 
+					'<link type="text/css" rel="stylesheet" href="/release/index.css" />' + 
+				'</head>'+ 
+				'<body style="background-color: '+ data.bgColor +'">' + 
+					bodyContext + 
+				'</body>' + 
+			'</html>';
+		return encodeURI(htmlContext)
+	}
 	render() {
 		const { unit } = this.props;
 		//初始化meta部分数据
-		var localData = unit.toJS();
-		var data = localData[0];
-		var initialContent = '<!DOCTYPE html><html><head>'+ 
+		let localData = unit.toJS();
+		let data = localData[0];
+		let initialContent = '<!DOCTYPE html><html><head>'+ 
 								'<title>' + data.title +'</title>'+
+								'<link rel="shortcut icon" href="/build/favicon.ico">' + 
+								'<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">'+
 								'<meta name="keywords" content=' + data.keywords + '>'+
 								'<meta name="description" content=' + data.desc + '>'+ 
-								'<link type="text/css" rel="stylesheet" href="./src/components/iframePage.css" />' + 
+								'<link type="text/css" rel="stylesheet" href="/release/index.css" />' + 
 							'</head>'+ 
 							'<body style="background-color: '+ data.bgColor +
 							'"><div id="framePage"></div></body></html>';
 		return (
-			<div className="m-preview">
+			<section className="m-preview">
+				<span id="release" onClick={() => this.release()}>发布</span>
 				<Frame  className="iframe" 
 	  					initialContent= {initialContent}
-	  					mountTarget='#framePage' data-id={Math.random()}>
+	  					mountTarget='#framePage'>
 					{renderUnits(unit)}
 				</Frame>
-			</div>
+			</section>
 		);
 	}
 }
