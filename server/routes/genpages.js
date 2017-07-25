@@ -5,8 +5,9 @@ var Promise = require("bluebird");
 
 var fs = Promise.promisifyAll(require("fs"));
 var env = require('../env.js');
-var request = require('request');
 var dir = require('../common/dir.js');
+var bcrypt = require('bcrypt');
+
 
 router.param(['id', 'page'], function(req, res, next, value) {
     console.log('CALLED ONLY ONCE with', value);
@@ -93,153 +94,65 @@ router.get('/username', function(req, res, next) {
     });
 });
 
+/* 平台密码验证接口 */
+router.post('/verifyPassWord', function(req, res, next) {
+    let password = req.body.password;
+    let filepath = './data/password.json';
+    fs.readFile(filepath, 'utf-8', function(err, data) {
+        if(err) console.log(err);
+        let tmp = JSON.parse(data);
+        bcrypt.compare(password, tmp.value, function(err, result) {
+            if(result){
+                res.json({
+                    retcode: 200,
+                    retdesc: '验证成功'
+                });
+            }else{
+                res.json({
+                    retcode: 400,
+                    retdesc: '验证失败'
+                });
+            }
+        });
+    });
+});
 
-/* 获取pagemake页面. */
-router.get('/preview/:product/:name/', function(req, res, next) {
-    var product = req.params.product,
-        fileName = req.params.name;
-    var options = {
-        root: path.resolve(env.tmpdir, product, fileName),
-        dotfiles: 'deny',
-        headers: {
-            'x-timestamp': Date.now(),
-            'x-sent': true
-        }
-    };
-    res.sendFile('index.html', options, function(err) {
+/* 检查目录接口 */
+router.post('/checkDirname', function(req, res, next) {
+    let dirname = req.body.dirname;
+    let filepath = './data/';
+    let existDirname = [];
+    fs.readdir(filepath, function(err, files) {
         if (err) {
-            console.log(err);
-            res.status(err.status).end();
-        } else {
-            console.log('Sent:', fileName);
+            return console.error(err);
+        }
+        files.forEach(function(file) {
+            let stats = fs.statSync(filepath + file);
+            if(stats.isDirectory() && /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(file)){
+                existDirname.push(file);
+            }
+        });
+        if(existDirname.indexOf(dirname) != -1){
+            res.json({
+                retcode: 201,
+                retdesc: '发布目录已存在'
+            });
+        }else{
+            res.json({
+                retcode: 200,
+                retdesc: '新的发布目录'
+            });
         }
     });
 });
 
-/* 检查目录可用性. */
-router.all('/checkdir', function(req, res, next) {
-    var body = req.body,
-        product = body.product || 'all',
-        dir = body.dir;
-    if (env.refuse(product)) {
-        res.json({
-            retcode: 400,
-            retdesc: '产品权限不足'
-        });
-        return;
-    }
-    if (dir) {
-        var fullDir = path.resolve(env.tmpdir, product, dir);
-        fs.existsSync(fullDir) ? res.json({
-            retcode: 200,
-            retdesc: '目录已存在'
-        }) : res.json({
-            retcode: 200,
-            retdesc: '目录可使用'
-        });
-    } else {
-        res.json({
-            retcode: 400,
-            retdesc: '参数错误'
-        });
-    }
-});
-
-/* 生成目录接口. */
-router.post('/gen', function(req, res, next) {
-    var retdesc,
-        body = req.body,
-        product = body.product || 'all',
-        dir = body.dir,
-        force = +body.force,
-        password = body.pass,
-        html = body.html;
-    body.newpass = body.newpass || body.pass;
-    if (env.refuse(product)) {
-        res.json({
-            retcode: 400,
-            retdesc: '产品权限不足'
-        });
-        return;
-    }
-    if (dir && html) {
-        var fullDir = path.resolve(env.tmpdir, product, dir),
-            fullPath = path.resolve(fullDir, 'index.html'),
-            configPath = path.resolve(fullDir, 'config.json');
-        if (fs.existsSync(fullDir)) {
-            fs.readFileAsync(configPath, "utf8").then(function(data) {
-                var config = JSON.parse(data);
-                if (force) {
-                    if (config.newpass === undefined || config.newpass === password) {
-                        fs.writeFileAsync(configPath, JSON.stringify(body)).then(function() {
-                            return fs.writeFileAsync(fullPath, html);
-                        }).then(function() {
-                            res.json({
-                                retcode: 400,
-                                retdesc: '文件覆盖成功'
-                            });
-                        }).catch(Error, function(e) {
-                            res.json({
-                                retcode: 400,
-                                retdesc: '配置写入失败'
-                            });
-                        }).catch(Error, function(e) {
-                            res.json({
-                                retcode: 400,
-                                retdesc: '文件覆盖失败'
-                            });
-                        })
-                    } else {
-                        res.json({
-                            retcode: 400,
-                            retdesc: '密码错误，操作失败'
-                        });
-                    }
-                } else {
-                    res.json({
-                        retcode: 400,
-                        retdesc: '非强制修改，操作失败'
-                    });
-                }
-            }).catch(Error, function(e) {
-                res.json({
-                    retcode: 400,
-                    retdesc: '配置读出失败'
-                });
-            })
-        } else {
-            fs.mkdirAsync(fullDir).then(function() {
-                return fs.writeFileAsync(configPath, JSON.stringify(body));
-            }).then(function() {
-                return fs.writeFileAsync(fullPath, html);
-            }).then(function() {
-                res.json({
-                    retcode: 200,
-                    retdesc: '文件创建成功'
-                });
-            }).catch(Error, function(e) {
-                res.json({
-                    retcode: 400,
-                    retdesc: '目录创建失败'
-                });
-            }).catch(Error, function(e) {
-                res.json({
-                    retcode: 400,
-                    retdesc: '配置写入失败'
-                });
-            }).catch(Error, function(e) {
-                res.json({
-                    retcode: 400,
-                    retdesc: '文件创建失败'
-                });
-            })
-        }
-    } else {
-        res.json({
-            retcode: 400,
-            retdesc: '参数错误'
-        });
-    }
-});
 
 module.exports = router;
+
+
+
+
+
+
+
+

@@ -1,10 +1,17 @@
 @import "./normalize";
 @import url(./iconfont.css);
-
-html, body, div, h5, h6, p, ul, li {
+html,
+body,
+div,
+h5,
+h6,
+p,
+ul,
+li {
     margin: 0px;
     padding: 0px;
 }
+
 html,
 body {
     height: 100%;
@@ -18,6 +25,10 @@ button {
 
 a {
     text-decoration: none;
+}
+
+input{
+    outline: 0;
 }
 
 em,
@@ -67,7 +78,27 @@ ul {
     top: -99999px
 }
 
+::-webkit-input-placeholder {
+    /* WebKit browsers */
+    color: #bdbdbd;
+}
 
+:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color: #bdbdbd;
+}
 
+::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: #bdbdbd;
+}
 
+:-ms-input-placeholder {
+    /* Internet Explorer 10+ */
+    color: #bdbdbd;
+}
 
+:-o-input-placeholder {
+    /* Internet Explorer 10+ */
+    color: #bdbdbd;
+}
