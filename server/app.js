@@ -10,6 +10,7 @@ var users = require('./routes/users');
 var genpages = require('./routes/genpages');
 var email = require('./routes/email');
 var h5 = require('./routes/h5');
+var released = require('./routes/released');
 
 
 var app = express();
@@ -39,6 +40,7 @@ app.use('/genpages', genpages);
 app.use('/users', users);
 app.use('/email', email);
 app.use('/h5', h5);
+app.use('/released', released);
 
 
 
