@@ -27,20 +27,6 @@ router.get('/', function(req, res, next) {
     });
 });
 
-/* 发布页面接口 */
-router.post('/release', function(req, res, next) {
-    var data = req.body;
-    var filepath = './release/' + data.name + '.html';
-    var formatData = decodeURI(data.html);
-    fs.writeFile(filepath, formatData, function(err) {
-        if(err) console.log(err);
-        res.json({
-            filepath: filepath,
-            retcode: 200,
-            retdesc: '下载成功'
-        });
-    });
-});
 
 /* 文件上传接口 */
 router.post('/upload', require('../common/upload'));
@@ -94,26 +80,86 @@ router.get('/username', function(req, res, next) {
     });
 });
 
-/* 平台密码验证接口 */
-router.post('/verifyPassWord', function(req, res, next) {
+/* 页面发布接口 */
+router.post('/release', function(req, res, next) {
+    let dirname = req.body.dirname;
     let password = req.body.password;
-    let filepath = './data/password.json';
-    fs.readFile(filepath, 'utf-8', function(err, data) {
-        if(err) console.log(err);
-        let tmp = JSON.parse(data);
-        bcrypt.compare(password, tmp.value, function(err, result) {
-            if(result){
-                res.json({
-                    retcode: 200,
-                    retdesc: '验证成功'
-                });
-            }else{
-                res.json({
-                    retcode: 400,
-                    retdesc: '验证失败'
-                });
+    let code = req.body.code;
+    let html = decodeURI(req.body.html);
+    let config = JSON.stringify(req.body.config);
+    // 验证平台密码
+    fs.readFileAsync('./data/password.json', 'utf-8')
+    .then(data => JSON.parse(data))
+    .then(tmp => bcrypt.compare(password, tmp.value))
+    .then((result) => {
+        if(!result){
+            res.json({
+                retcode: 400,
+                retdesc: '平台密码错误'
+            });
+            // 所有想直接结束promise链的，直接reject掉，去catch里处理
+            return Promise.reject();
+        }else{
+            return fs.readdirAsync('./data/');
+        }
+    })
+    .then((files) => {
+        // 检测是否是新目录
+        let existDirname = [];
+        files.forEach(file => {
+            let stats = fs.statSync('./data/' + file);
+            if(stats.isDirectory() && /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(file)){
+                existDirname.push(file);
             }
         });
+        if(existDirname.indexOf(dirname) != -1){
+            // 旧目录，则验证密码，更新html文件和json配置文件
+            fs.readFileAsync('./data/'+ dirname + '/code.json', 'utf-8')
+            .then(data => JSON.parse(data))
+            .then(tmp => bcrypt.compare(code, tmp.value))
+            .then((result) => {
+                if(!result){
+                    res.json({
+                        retcode: 410,
+                        retdesc: '发布密码错误'
+                    });
+                    return Promise.reject();
+                }else{
+                    return fs.writeFileAsync('./release/' + dirname + '.html', html);
+                }
+            })
+            .then( () => fs.writeFileAsync('./data/' + dirname + '/config.json', config))
+            .then( () => {
+                res.json({
+                    dirname,
+                    retcode: 200,
+                    retdesc: '发布成功!'
+                });
+            })
+            .catch(function(e) {
+                if(e instanceof Error) console.error(e.stack);
+            });
+        }else{
+            // 新目录，则创建html文件、新建目录并创建json配置文件、发布密码
+            fs.writeFileAsync('./release/' + dirname + '.html', html)
+            .then(() => fs.mkdirAsync('./data/' + dirname))
+            .then(() => fs.writeFileAsync('./data/' + dirname + '/config.json', config))
+            .then(() => bcrypt.hash(code, 10))
+            .then((hash) => fs.writeFileAsync('./data/' + dirname + '/code.json', JSON.stringify({value: hash})))
+            .then( () => {
+                res.json({
+                    dirname,
+                    retcode: 200,
+                    retdesc: '发布成功!'
+                });
+            })
+            .catch(function(e) {
+                if(e instanceof Error) console.error(e.stack);
+            });
+        }
+    })
+    .catch(function(e) {
+        if(e instanceof Error) console.error(e.stack);
     });
 });
 

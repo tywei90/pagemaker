@@ -64,9 +64,8 @@ class Preview extends React.Component {
 		this.setState({visible: true});
 		setTimeout(()=>{
 			this.submitBtn = document.getElementsByClassName('ant-btn-primary')[0];
-			this.submitBtn.classList.add('disabled');
+			this.submitBtn.setAttribute('disabled', 'disabled');
 		}, 0)
-		
 	}
 	handleInput(){
 		let dirname = this.refs.dirname.value.trim();
@@ -74,12 +73,11 @@ class Preview extends React.Component {
 		let code = this.refs.code.value.trim();
 		if(/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(dirname) && password != '' && code != ''){
 			this.setState({stateOK: true});
-			this.submitBtn.classList.remove('disabled');
+			this.submitBtn.removeAttribute('disabled');
 		}else{
 			this.setState({stateOK: false});
-			this.submitBtn.classList.add('disabled');
+			this.submitBtn.setAttribute('disabled', 'disabled');
 		}
-
 	}
 	handleBlur(){
 		let dirname = this.refs.dirname.value.trim();
@@ -128,22 +126,24 @@ class Preview extends React.Component {
 		if(!this.state.stateOK){
 			return
 		}
+		const { unit } = this.props;
+		let config = unit.toJS();
 		let dirname = this.refs.dirname.value.trim();
 		let password = this.refs.password.value.trim();
 		let code = this.refs.code.value.trim();
+		let html = this.prepareData();
 		this.setState({
 	    	confirmLoading: true,
 	    });
-		fetch('/genpages/verifyPassWord', {
+		fetch('/genpages/release', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({password})
+            body: JSON.stringify({dirname, password, code, html, config})
         })
         .then(response => response.json())
         .then(data => {
-        	console.log(data);
         	this.setState({
 		    	confirmLoading: false,
 		    });
@@ -151,40 +151,35 @@ class Preview extends React.Component {
             	this.setState({
             		visible: false
             	});
+            	Modal.success({
+			    	title: '页面发布成功!',
+			    	content: <div>查看发布的页面<a href={`/release/${data.dirname}.html`}>点击这里</a></div>,
+			  	});
             }else{
             	this.setState({
-			    	errTip1: '密码错误'
+			    	errTip2: data.retdesc
 			  	});
             }
         })
         .catch(e => console.log("Oops, error", e))
 	}
 	handleCancel(){
-	    console.log('Clicked cancel button');
-	    this.refs.password.value = '';
 	    this.setState({
-	        visible: false,
-	        errTip1: ''
+	    	visible: false
 	    });
-	}
-	release(){
-		let htmlContext = this.prepareData();
-		let data = {
-			html: htmlContext,
-			name: 'lmlc'
-		}
-        fetch('/genpages/release', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        // .then(response => response.json())
-        // .then(data => {
-            
-        // })
-        .catch(e => console.log("Oops, error", e))
+	    setTimeout(() => {
+	    	this.refs.dirname.value = '';
+			this.refs.password.value = '';
+			this.refs.code.value = '';
+			this.setState({
+		        errTip1: '',
+		    	errTip2: '',
+		    	stateTip: '',
+		    	stateOK: false,
+		    	placeholder: '请输入发布密码',
+		    	confirmLoading: false
+		    });
+	    }, 500);
 	}
 	prepareData(){
 		const { unit } = this.props;
@@ -228,16 +223,20 @@ class Preview extends React.Component {
 							'"><div id="framePage"></div></body></html>';
 		return (
 			<section className="m-preview">
-				<span id="release" onClick={()=>{this.showModal()}}>发布</span>
+				<span id="release" onClick={this.showModal.bind(this)}>发布</span>
 				<Modal title="请输入发布信息"
 					wrapClassName="publish-dialog"
 					maskClosable={false}
 		         	visible={visible}
-		         	okText="发布"
 		         	onOk={this.handleOk.bind(this)}
-		         	confirmLoading={confirmLoading}
-		         	onCancel={this.handleCancel.bind(this)}
-		        >
+			        onCancel={this.handleCancel.bind(this)}
+		         	footer={[
+		            	<Button key="back" size="large" onClick={this.handleCancel.bind(this)}>取消</Button>,
+		            	<Button key="submit" type="primary" size="large" loading={confirmLoading} onClick={this.handleOk.bind(this)}>
+		            		发布
+		            	</Button>
+		          	]}
+		         >
 			        <div className="dirname f-cb">
 			        	<label className="f-fl">发布目录</label>
 			        	<input 
@@ -276,7 +275,7 @@ class Preview extends React.Component {
 			        		placeholder="请输入平台密码"
 			        		onInput={this.handleInput.bind(this)}
 			        		onFocus={()=>{this.setState({errTip2: ''})}}/>
-			         	<p><i className={`iconfont icon-cuowu ${errTip2 == ""? "f-hide" : ""}`}></i>{errTip2}</p>
+			         	<p className="errTip2"><i className={`iconfont icon-cuowu ${errTip2 == ""? "f-hide" : ""}`}></i>{errTip2}</p>
 			        </div>
 		        </Modal>
 				<Frame  className="iframe" 
