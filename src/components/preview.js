@@ -223,7 +223,8 @@ class Preview extends React.Component {
 							'"><div id="framePage"></div></body></html>';
 		return (
 			<section className="m-preview">
-				<span id="release" onClick={this.showModal.bind(this)}>发布</span>
+			<span id="release" onClick={this.showModal.bind(this)}><i className="iconfont icon-fabu"></i>发布</span>
+				<a href="/released" className="see-released"><i className="iconfont icon-chakan"></i>查看</a>
 				<Modal title="请输入发布信息"
 					wrapClassName="publish-dialog"
 					maskClosable={false}

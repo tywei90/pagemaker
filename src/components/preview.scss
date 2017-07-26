@@ -19,17 +19,33 @@ iframe {
 }
 
 #release {
-    width: 60px;
-    height: 60px;
+    height: 40px;
     text-align: center;
-    line-height: 60px;
-    border-radius: 50%;
+    line-height: 40px;
     position: absolute;
-    bottom: 28px;
-    left: 50%;
-    margin-left: -29px;
+    top: 59px;
+    left: 65px;
     font-size: 18px;
-    color: rgba(255, 87, 34, 1);
+    color: #ff5722;
+    cursor: pointer;
+    i{
+        margin-right: 5px;
+    }
+}
+
+.see-released {
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    position: absolute;
+    top: 59px;
+    right: 57px;
+    font-size: 18px;
+    color: #79b33a;
+    cursor: pointer;
+    i{
+        margin-right: 5px;
+    }
 }
 
 .publish-dialog {

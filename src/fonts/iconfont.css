@@ -1,10 +1,10 @@
 
 @font-face {font-family: "iconfont";
-  src: url('iconfont.eot?t=1500542597088'); /* IE9*/
-  src: url('iconfont.eot?t=1500542597088#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('iconfont.woff?t=1500542597088') format('woff'), /* chrome, firefox */
-  url('iconfont.ttf?t=1500542597088') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('iconfont.svg?t=1500542597088#iconfont') format('svg'); /* iOS 4.1- */
+  src: url('iconfont.eot?t=1501077918975'); /* IE9*/
+  src: url('iconfont.eot?t=1501077918975#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('iconfont.woff?t=1501077918975') format('woff'), /* chrome, firefox */
+  url('iconfont.ttf?t=1501077918975') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('iconfont.svg?t=1501077918975#iconfont') format('svg'); /* iOS 4.1- */
 }
 
 .iconfont {
@@ -64,6 +64,10 @@
 .icon-yidong:before { content: "\e655"; }
 
 .icon-anniu:before { content: "\e62d"; }
+
+.icon-chakan:before { content: "\e62e"; }
+
+.icon-fabu1:before { content: "\e62a"; }
 
 .icon-zhengwen:before { content: "\e6e3"; }
 
