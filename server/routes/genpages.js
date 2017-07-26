@@ -80,6 +80,40 @@ router.get('/username', function(req, res, next) {
     });
 });
 
+/* 通过目录名称获取配置文件接口 */
+router.post('/getConfig', function(req, res, next) {
+    let dirname = req.body.dirname;
+    let filepath = './data/';
+    let existDirname = [];
+    fs.readdir(filepath, function(err, files) {
+        if (err) {
+            return console.error(err);
+        }
+        files.forEach(function(file) {
+            let stats = fs.statSync(filepath + file);
+            if(stats.isDirectory() && /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(file)){
+                existDirname.push(file);
+            }
+        });
+        if(existDirname.indexOf(dirname) != -1){
+            fs.readFileAsync(filepath + dirname + '/config.json', 'utf-8')
+            .then(data => JSON.parse(data))
+            .then((result) => {
+                res.json({
+                    config: result,
+                    retcode: 200,
+                    retdesc: '导入成功'
+                });
+            })
+        }else{
+            res.json({
+                retcode: 400,
+                retdesc: '发布目录不存在'
+            });
+        }
+    });
+});
+
 /* 页面发布接口 */
 router.post('/release', function(req, res, next) {
     let dirname = req.body.dirname;

@@ -63,7 +63,7 @@ class Preview extends React.Component {
 	showModal(){
 		this.setState({visible: true});
 		setTimeout(()=>{
-			this.submitBtn = document.getElementsByClassName('ant-btn-primary')[0];
+			this.submitBtn = document.getElementById('releaseBtn');
 			this.submitBtn.setAttribute('disabled', 'disabled');
 		}, 0)
 	}
@@ -232,15 +232,14 @@ class Preview extends React.Component {
 			        onCancel={this.handleCancel.bind(this)}
 		         	footer={[
 		            	<Button key="back" size="large" onClick={this.handleCancel.bind(this)}>取消</Button>,
-		            	<Button key="submit" type="primary" size="large" loading={confirmLoading} onClick={this.handleOk.bind(this)}>
+		            	<Button key="submit" id="releaseBtn" type="primary" size="large" loading={confirmLoading} onClick={this.handleOk.bind(this)}>
 		            		发布
 		            	</Button>
 		          	]}
 		         >
 			        <div className="dirname f-cb">
-			        	<label className="f-fl">发布目录</label>
+			        	<label>发布目录</label>
 			        	<input 
-			        		className="f-fl" 
 			        		ref="dirname" 
 			        		name="发布目录" 
 			        		type="text" 
@@ -257,7 +256,7 @@ class Preview extends React.Component {
 			         	</p>
 			        </div>
 			        <div className="code">
-				        <label className="f-fl">发布密码</label>
+				        <label>发布密码</label>
 			        	<input 
 			        		ref="code" 
 			        		name="发布密码" 
@@ -267,7 +266,7 @@ class Preview extends React.Component {
 			        		onFocus={()=>{this.setState({errTip2: ''})}}/>
 			        </div>
 			        <div className="password">
-			        	<label className="f-fl">平台密码</label>
+			        	<label>平台密码</label>
 			        	<input 
 			        		ref="password" 
 			        		name="平台密码" 
