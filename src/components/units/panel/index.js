@@ -42,7 +42,7 @@ class UnitPanel extends React.Component {
         });
     }
     copyUnit(id){
-        unitAction.copyUnit(id);
+        unitAction.copyUnit(id); 
         this.success();
     }
     success() {
@@ -53,7 +53,7 @@ class UnitPanel extends React.Component {
         setTimeout(() => modal.destroy(), 1000);
     }
     handleMouseDown(e) {
-        if (!this.state.dragFlag) {
+        if (!this.state.dragFlag && e.target.className.indexOf('icon-yidong') > -1) {
             this.panel = e.target.offsetParent;
             this.startTop = this.panel.offsetTop;
             this.panel.style.zIndex = 1;
@@ -130,7 +130,12 @@ class UnitPanel extends React.Component {
         return (
             editable?
                 <div className={`unit-common unit-${type} ${cls}`} data-id={Math.random()}>
-                    <div className="header f-cb" onClick={(e) => !e.target.className.indexOf('header') && this.setState({'showDetail': !showDetail})}>
+                    <div 
+                        className="header f-cb" 
+                        onClick={(e) => !e.target.className.indexOf('header') && this.setState({'showDetail': !showDetail})}
+                        onMouseDown={(e) => this.handleMouseDown(e)}
+                        onMouseMove={(e) => this.handleMouseMove(e)}
+                        onMouseUp={(e) => this.handleMouseUp(e)}>
                         <i className="f-fl f-hide2 icon iconfont icon-iconfontbi" onClick={() => this.refs.name.focus()}></i>
                         <input 
                             className="f-fl"
@@ -142,11 +147,7 @@ class UnitPanel extends React.Component {
                         <i className={`f-fr icon iconfont icon-zhankaianniu ${showDetail? "arrow-up": "arrow-down"}`} onClick={(e) => this.setState({'showDetail': !showDetail})}></i>
                         <i className="f-fr f-hide2 icon iconfont icon-shanchu1" onClick={this.showConfirm.bind(this, id)}></i>
                         <i className="f-fr f-hide2 icon iconfont icon-fuzhi" onClick={this.copyUnit.bind(this, id)}></i>
-                        <i className="f-fr f-hide2 icon iconfont icon-yidong" 
-                            onMouseDown={(e) => this.handleMouseDown(e)}
-                            onMouseMove={(e) => this.handleMouseMove(e)}
-                            onMouseUp={(e) => this.handleMouseUp(e)}
-                        ></i>
+                        <i className="f-fr f-hide2 icon iconfont icon-yidong"></i>
                     </div>
                     <div className={`content ${showDetail? "show-detail": "hide-detail"}`}>
                         { children }
