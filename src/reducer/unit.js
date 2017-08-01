@@ -66,6 +66,22 @@ const unitsConfig = immutable.fromJS({
         noUL: true,
         borderRadius: true
     },
+    AUDIO: {
+        type: 'AUDIO',
+        name: '音频',
+        address: '',
+        showType: '',
+        title: '',
+        style: '',
+        playSetting: '',
+        margin: [0, 30, 24, 30]
+    },
+    CODE: {
+        type: 'CODE',
+        name: 'JSCSS',
+        js: '',
+        css: ''
+    }
 })
 
 const initialState = immutable.fromJS([
