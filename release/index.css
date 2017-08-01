@@ -21,45 +21,6 @@ body{
 section {
     overflow-x: hidden;
 }
-
-#framePage .title a {
-    display: block;
-    text-decoration: none;
-}
-
-#framePage .image img {
-    width: 100%;
-    display: block;
-}
-#framePage .image p{
-    position: absolute;
-	bottom: 0;
-	height: 2rem;
-	line-height: 2rem;
-	width: 100%;
-	text-align: center;
-	background: #666;
-	color: #fff;
-	opacity: 0.6;
-}
-#framePage .button a {
-    display: inline-block;
-    width: 100%;
-    height: 3rem;
-    line-height: 3rem;
-    text-align: center;
-    font-size: 1rem;
-    border: 0;
-    border-radius: 4px;
-    padding: 0;
-}
-
-.button a {
-    border: none;
-    outline: none;
-    background-color: transparent;
-}
-
 a {
     text-decoration: none;
 }
@@ -110,3 +71,64 @@ ul {
     left: -99999px;
     top: -99999px
 }
+
+#framePage .title a {
+    display: block;
+    text-decoration: none;
+}
+
+#framePage .image img {
+    width: 100%;
+    display: block;
+}
+#framePage .image p{
+    position: absolute;
+	bottom: 0;
+	height: 2rem;
+	line-height: 2rem;
+	width: 100%;
+	text-align: center;
+	background: #666;
+	color: #fff;
+	opacity: 0.6;
+}
+#framePage .button a {
+    display: inline-block;
+    width: 100%;
+    height: 3rem;
+    line-height: 3rem;
+    text-align: center;
+    font-size: 1rem;
+    border: 0;
+    border-radius: 4px;
+    padding: 0;
+}
+
+.button a {
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+#framePage .article-content b{
+    color: #d91d37;
+}
+#framePage .article-content i{
+    color: #ffcc00;
+}
+#framePage .article-content a{
+    text-decoration: underline;
+}
+#framePage .bigPD .article-content p:not(:first-child){
+    margin-top: 10px;
+}
+#framePage .noUL .article-content a{
+    text-decoration: none;
+}
+
+
+
+
+
+
+
+

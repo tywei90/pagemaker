@@ -16,15 +16,24 @@ class PreTextBody extends React.Component {
 		}
 	}
 	render() {
-		var fontSize,textIndent,lineHeight,textDecoration,borderRadius;
-		var style = {};
+		let fontSize,textIndent,lineHeight,borderRadius;
+		let style = {};
+		let content = '';
 		const { data } = this.props;
 		let jsdata = data.toJS();
+		if(jsdata.changeLine){
+			let text = jsdata.text.replace(/\\\n/g, '');
+			let arr = text.split('\n');
+			content = arr.map(function(val){return '<p>' + val + '</p>'}).join('');
+		}else{
+			content = jsdata.text;
+		}
+		let contentHtml = <article className='article-content' dangerouslySetInnerHTML={{__html: content}}></article>;
 		switch(jsdata.fontSize) {
-			case 'small': fontSize = '0.5rem'; break;
+			case 'small': fontSize = '0.9rem'; break;
 			case 'middle': fontSize = '1rem'; break;
-			case 'big': fontSize = '1.5rem'; break;
-			case 'superbig': fontSize = '2.5rem'; break;
+			case 'big': fontSize = '1.05rem'; break;
+			case 'superbig': fontSize = '1.1rem'; break;
 		}
 		if (jsdata.retract) {
 			textIndent = '2em'
@@ -36,21 +45,19 @@ class PreTextBody extends React.Component {
 		}else {
 			lineHeight = 1.5
 		}
-		if(jsdata.noUL) {
-			textDecoration = 'none'
-		}else {
-			textDecoration = 'underline'
-		}
 		if(jsdata.borderRadius) {
-			borderRadius = '4px'
+			borderRadius = '6px'
 		}else {
 			borderRadius = '0'
 		}	
 		style = {
-			textColor: jsdata.textColor,
+			color: jsdata.textColor,
 			backgroundColor: jsdata.bgColor,
 			textAlign: jsdata.textAlign,
 			fontSize: fontSize,
+			textIndent: textIndent,
+			lineHeight: lineHeight,
+			borderRadius: borderRadius,
 			marginTop: jsdata.margin[0],
 			marginRight: jsdata.margin[1],
 			marginBottom: jsdata.margin[2],
@@ -58,24 +65,11 @@ class PreTextBody extends React.Component {
 			paddingTop: jsdata.padding[0],
 			paddingRight: jsdata.padding[1],
 			paddingBottom: jsdata.padding[2],
-			paddingLeft: jsdata.padding[3],
-			textIndent: textIndent,
-			lineHeight: lineHeight,
-			textDecoration: textDecoration,
-			borderRadius: borderRadius
+			paddingLeft: jsdata.padding[3]
 		};
-        // changeLine: 'changeLine',
-        // retract: 'retract',
-        // bigLH: '',
-        // bigPD: '',
-        // noUL: '',
-        // borderRadius: ''
-        // console.log(borderRadius)
 		return (
-			<section className={`textbody`}  style={style}>
-				<p>
-					{jsdata.text}
-				</p>
+			<section className={`textbody ${jsdata.bigPD? 'bigPD': ''} ${jsdata.noUL? 'noUL': ''}`}  style={style}>
+				{contentHtml}
 			</section>
 		)
 	}

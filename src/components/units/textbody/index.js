@@ -7,7 +7,6 @@ import { Modal } from 'antd';
 
 import './index.scss';
 
-
 import unitAction from '../../../action/unit';
 import UnitPanel from '../panel/index';
 import ColorPicker from 'rc-color-picker';
@@ -32,6 +31,7 @@ class UnitTextBody extends React.Component {
                         <ul className="f-fr">
                             <li className="f-cb f-fl" style={{position:'relative'}}> 
                             <textarea
+                                data-id={Math.random()}
                                 className="f-fl"
                                 type="text"
                                 placeholder="正文内容"
@@ -42,7 +42,7 @@ class UnitTextBody extends React.Component {
                             <span className="example-btn f-fl" >
                                 <a
                                     data-info='这里是正文，原则上支持任何html代码，不过你要小心，不要从别处直接复制html过来，否则可能会造成一些不可预期的潜在风险。这里可以<b>标红</b><i>标黄</i><strong>加粗</strong><a href="share://">分享链接</a>。在行尾添加 \ 字符后，可以消除一个换行导致的分段，可使两行间距变小一些。'
-                                    onClick={(e)=>this.refs.text.value = e.target.getAttribute('data-info')}
+                                    onClick={e=>unitAction.editUnit(id, 'text', e.target.getAttribute('data-info'))}
                                 >
                                     示例
                                 </a>
@@ -191,9 +191,9 @@ class UnitTextBody extends React.Component {
                                     value="changeLine"
                                     id={`changeLine${id}`}
                                     defaultChecked={data.get('changeLine')}
-                                    onClick={()=>unitAction.editUnit(id, 'changeLine', this.refs.changeLine.value)}
+                                    onClick={()=>unitAction.editUnit(id, 'changeLine', this.refs.changeLine.checked)}
                                 />
-                              <label htmlFor={`changeline${id}`}>回车换行</label>
+                              <label htmlFor={`changeLine${id}`}>回车换行</label>
                             </li>
                             <li className="f-fl">
                                 <input
@@ -203,7 +203,7 @@ class UnitTextBody extends React.Component {
                                     value="retract"
                                     id={`retract${id}`}
                                     defaultChecked={data.get('retract')}
-                                    onClick={()=>unitAction.editUnit(id, 'retract', this.refs.retract.value)}
+                                    onClick={()=>unitAction.editUnit(id, 'retract', this.refs.retract.checked)}
                                 />
                               <label htmlFor={`retract${id}`}>换行缩进</label>
                             </li>
@@ -215,9 +215,9 @@ class UnitTextBody extends React.Component {
                                     value="bigLH"
                                     id={`bigLH${id}`}
                                     defaultChecked={data.get('bigLH')}
-                                    onClick={()=>unitAction.editUnit(id, 'bigLH', this.refs.bigLH.value)}
+                                    onClick={()=>unitAction.editUnit(id, 'bigLH', this.refs.bigLH.checked)}
                                 />
-                              <label htmlFor={`retract${id}`}>大行距</label>
+                              <label htmlFor={`bigLH${id}`}>大行距</label>
                             </li>
                             <li className="f-fl">
                                 <input
@@ -227,7 +227,7 @@ class UnitTextBody extends React.Component {
                                     value="bigPD"
                                     id={`bigPD${id}`}
                                     defaultChecked={data.get('bigPD')}
-                                    onClick={()=>unitAction.editUnit(id, 'bigPD', this.refs.bigPD.value)}
+                                    onClick={()=>unitAction.editUnit(id, 'bigPD', this.refs.bigPD.checked)}
                                 />
                               <label htmlFor={`bigPD${id}`}>大段距</label>
                             </li>
@@ -239,7 +239,7 @@ class UnitTextBody extends React.Component {
                                     value="noUL"
                                     id={`noUL${id}`}
                                     defaultChecked={data.get('noUL')}
-                                    onClick={()=>unitAction.editUnit(id, 'noUL', this.refs.noUL.value)}
+                                    onClick={()=>unitAction.editUnit(id, 'noUL', this.refs.noUL.checked)}
                                 />
                               <label htmlFor={`noUL${id}`}>链接无下划线</label>
                             </li>
@@ -251,7 +251,7 @@ class UnitTextBody extends React.Component {
                                     value="borderRadius"
                                     id={`borderRadius${id}`}
                                     defaultChecked={data.get('borderRadius')}
-                                    onClick={()=>unitAction.editUnit(id, 'borderRadius', this.refs.borderRadius.value)}
+                                    onClick={()=>unitAction.editUnit(id, 'borderRadius', this.refs.borderRadius.checked)}
                                 />
                               <label htmlFor={`borderRadius${id}`}>圆角边框</label>
                             </li>

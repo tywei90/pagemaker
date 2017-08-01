@@ -62,9 +62,9 @@ const unitsConfig = immutable.fromJS({
         changeLine: true,
         retract: true,
         bigLH: true,
-        bigPD: '',
-        noUL: '',
-        borderRadius: ''
+        bigPD: true,
+        noUL: true,
+        borderRadius: true
     },
 })
 
@@ -125,7 +125,7 @@ function reducer(state = initialState, action) {
         default:
             newState = state;
     }
-    // console.log(newState.toJS()[4]);
+    // console.table([newState.toJS()[4]]);
     // 更新localstorage，便于恢复现场
     localStorage.setItem('config', JSON.stringify(newState.toJS()));
     return newState
