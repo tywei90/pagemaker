@@ -64,6 +64,7 @@
     "multer": "^1.2.0",
     "pug": "~2.0.0-beta6",
     "pure-render-decorator": "^1.2.1",
+    "rc-color-picker": "^1.1.7",
     "rc-queue-anim": "^0.12.6",
     "rc-tween-one": "^0.11.10",
     "react": "^15.3.1",

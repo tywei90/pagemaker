@@ -9,6 +9,7 @@ import './index.scss';
 
 import unitAction from '../../../action/unit';
 import UnitPanel from '../panel/index';
+import ColorPicker from 'rc-color-picker';
 
 @pureRender
 class UnitImage extends React.Component {
@@ -81,14 +82,18 @@ class UnitImage extends React.Component {
                     </li>
                     <li className="f-cb">
                         <label className="f-fl">填充色</label>
-                        <input 
-                            style={{background:data.get('bgColor')}}
-                            className="f-fr"
+                        <input
+                            className="input-color f-fl"
                             type="text"
                             placeholder="填充色"
-                            defaultValue={data.get('bgColor')}
+                            value={data.get('bgColor')}
                             ref="bgColor"
-                            onChange={()=>unitAction.editUnit(id, 'bgColor', this.refs.bgColor.value)}
+                            disabled
+                        />
+                        <ColorPicker 
+                            color={data.get('bgColor')} 
+                            onChange={(colorObj)=>unitAction.editUnit(id, 'bgColor', colorObj.color)}
+                            placement="bottomLeft"
                         />
                     </li>
                     <li className="f-cb">

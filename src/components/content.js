@@ -6,6 +6,8 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Modal, Upload, message } from 'antd';
 
 import './content.scss';
+// 在content里引入一次color-picker样式即可
+import 'rc-color-picker/assets/index.css';
 
 import unitAction from '../action/unit';
 

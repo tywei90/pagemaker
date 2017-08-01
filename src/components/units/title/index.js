@@ -9,6 +9,7 @@ import './index.scss';
 
 import unitAction from '../../../action/unit';
 import UnitPanel from '../panel/index';
+import ColorPicker from 'rc-color-picker';
 
 @pureRender
 class UnitTitle extends React.Component {
@@ -48,14 +49,18 @@ class UnitTitle extends React.Component {
                     </li>
                     <li className="f-cb">
                         <label className="f-fl">标题颜色</label>
-                        <input 
-                            //style={{color:data.get('color')}}
-                            className="f-fr"
+                         <input
+                            className="input-color f-fl"
                             type="text"
                             placeholder="标题颜色"
                             value={data.get('color')}
                             ref="color"
-                            onChange={()=>unitAction.editUnit(id, 'color', this.refs.color.value)}
+                            disabled
+                        />
+                        <ColorPicker 
+                            color={data.get('color')} 
+                            onChange={(colorObj)=>unitAction.editUnit(id, 'color', colorObj.color)}
+                            placement="bottomLeft"
                         />
                     </li>
                     <li className="f-cb">

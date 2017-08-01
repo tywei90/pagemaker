@@ -7,8 +7,10 @@ import { Modal } from 'antd';
 
 import './index.scss';
 
+
 import unitAction from '../../../action/unit';
 import UnitPanel from '../panel/index';
+import ColorPicker from 'rc-color-picker';
 
 @pureRender
 class UnitTextBody extends React.Component {
@@ -28,32 +30,57 @@ class UnitTextBody extends React.Component {
                     <li className="f-cb title-part">
                         <label className="f-fl">正文内容</label>
                         <ul className="f-fr">
-                          <li>
-                          <textarea
-                              className="f-fl"
-                              type="text"
-                              placeholder="正文内容"
-                              value={data.get('text')}
-                              ref="text"
-                              onChange={()=>unitAction.editUnit(id, 'text', this.refs.text.value)}
-                          ></textarea>
-                          <a className="example-btn f-fl">示例</a>
-                          </li>
+                            <li className="f-cb f-fl" style={{position:'relative'}}> 
+                            <textarea
+                                className="f-fl"
+                                type="text"
+                                placeholder="正文内容"
+                                value={data.get('text')}
+                                ref="text"
+                                onChange={()=>unitAction.editUnit(id, 'text', this.refs.text.value)}
+                            ></textarea>
+                            <span className="example-btn f-fl" >
+                                <a
+                                    data-info='这里是正文，原则上支持任何html代码，不过你要小心，不要从别处直接复制html过来，否则可能会造成一些不可预期的潜在风险。这里可以<b>标红</b><i>标黄</i><strong>加粗</strong><a href="share://">分享链接</a>。在行尾添加 \ 字符后，可以消除一个换行导致的分段，可使两行间距变小一些。'
+                                    onClick={(e)=>this.refs.text.value = e.target.getAttribute('data-info')}
+                                >
+                                    示例
+                                </a>
+                            </span>
+                            </li>
                         </ul>
                     </li>
-                    {/*正文颜色 这里是一个取色器的component */}
                     <li className="f-cb">
-                        <label className="f-fl">正文颜色</label>
-                        <a
-                            className="text-color"
+                        <label className="f-fl">字体颜色</label>
+                        <input
+                            className="input-color f-fl"
                             type="text"
-                            placeholder={data.get('textColor')}
+                            placeholder="字体颜色"
                             value={data.get('textColor')}
                             ref="textColor"
-                            onChange={()=>unitAction.editUnit(id, 'textcolor', this.refs.text.value)}
-                            // style={textColorStyle}
-                            style={{background:data.get('textcolor')}}
-                        >{data.get('textColor')}</a>
+                            disabled
+                        />
+                        <ColorPicker 
+                            color={data.get('textColor')} 
+                            onChange={(colorObj)=>unitAction.editUnit(id, 'textColor', colorObj.color)}
+                            placement="bottomLeft"
+                        />
+                    </li>
+                    <li className="f-cb">
+                        <label className="f-fl">正文背景</label>
+                        <input
+                            className="input-color f-fl"
+                            type="text"
+                            placeholder="正文背景"
+                            value={data.get('bgColor')}
+                            ref="bgColor"
+                            disabled
+                        />
+                        <ColorPicker 
+                            color={data.get('bgColor')} 
+                            onChange={(colorObj)=>unitAction.editUnit(id, 'bgColor', colorObj.color)}
+                            placement="bottomLeft"
+                        />
                     </li>
                     {/* 布局 */}
                     <li className="f-cb">
@@ -229,24 +256,6 @@ class UnitTextBody extends React.Component {
                               <label htmlFor={`borderRadius${id}`}>圆角边框</label>
                             </li>
                         </ul>
-                    </li>
-                    {/*正文背景颜色 这里是一个取色器的component */}
-                    <li className="f-cb">
-                        <label className="f-fl">正文背景</label>
-                        <a
-                            className="text-color"
-                            type="text"
-                            placeholder={this.state.bgColor}
-                            value={data.get('bgColor')}
-                            ref="bgColor"
-                            onChange={()=>unitAction.editUnit(id, 'bgcolor', this.refs.text.value)}
-                            // style={textColorStyle}
-                            style={{background:data.get('bgColor')}}
-                        >{data.get('bgColor')}</a>
-                      {/* <input
-                            className="textBgImg"
-                            type='text'
-                        /> */}
                     </li>
                     <li className="f-cb">
                         <label className="f-fl">组件内边距</label>

@@ -125,7 +125,7 @@ function reducer(state = initialState, action) {
         default:
             newState = state;
     }
-    // console.table(newState.toJS());
+    // console.log(newState.toJS()[4]);
     // 更新localstorage，便于恢复现场
     localStorage.setItem('config', JSON.stringify(newState.toJS()));
     return newState

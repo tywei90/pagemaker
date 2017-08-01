@@ -59,7 +59,7 @@
             }
         }
         .content {
-            overflow: hidden;
+            overflow: scroll;
             >ul{
                 padding: 20px;
                 >li{
@@ -85,6 +85,27 @@
                         border: 1px solid #ccc;
                         border-radius: 4px;
                         box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+                        &:focus{
+                            border-color: #66afe9;
+                            outline: 0;
+                            box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+                        }
+                    }
+                    input.input-color{
+                        width: 85px;
+                        margin-left: 52px;
+                        cursor: not-allowed;
+                    }
+                    .rc-color-picker-wrap {
+                        margin: 4px 0 0 8px;
+                    }
+                    textarea{
+                        border: 1px solid #ccc;
+                        &:focus{
+                            border-color: #66afe9;
+                            outline: 0;
+                            box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+                        }
                     }
                     .upload{
                         position: absolute;
