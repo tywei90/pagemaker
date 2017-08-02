@@ -59,10 +59,13 @@ class Preview extends React.Component {
 	    	visible: false,
 	    	confirmLoading: false,
 	    	confirmLoading2: false,
-	    	isDirnameExist: false
+	    	confirmLoading3: false,
+	    	isDirnameExist: false,
+	    	visible2: false,
+	    	errTip3: ''
 	  	}
 	}
-	showModal(){
+	showReleaseModal(){
 		this.setState({visible: true});
 		setTimeout(()=>{
 			this.submitBtn = document.getElementById('releaseBtn');
@@ -152,9 +155,7 @@ class Preview extends React.Component {
 		    	confirmLoading: false,
 		    });
             if(data.retcode == 200){
-            	this.setState({
-            		visible: false
-            	});
+            	this.handleCancel();
             	Modal.success({
 			    	title: '页面发布成功!',
 			    	content: <div>查看发布的页面<a href={`/release/${data.dirname}.html`}>点击这里</a></div>,
@@ -236,6 +237,87 @@ class Preview extends React.Component {
         })
         .catch(e => console.log("Oops, error", e))
 	}
+	showClearModal(){
+		this.setState({visible2: true});
+		setTimeout(()=>{
+			this.clearBtn = document.getElementById('clearBtn');
+			this.clearBtn.setAttribute('disabled', 'disabled');
+		}, 0)
+	}
+	handleInput2(){
+		let password = this.refs.password2.value.trim();
+		if(password != ''){
+			this.clearBtn.removeAttribute('disabled');
+		}else{
+			this.clearBtn.setAttribute('disabled', 'disabled');
+		}
+	}
+	handleOk2(){
+		const { unit } = this.props;
+		let config = unit.toJS();
+		let password = this.refs.password2.value.trim();
+		if(password == ''){
+			return
+		}
+		this.setState({
+	    	confirmLoading3: true,
+	    });
+		fetch('/genpages/clear', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ password, config })
+        })
+        .then(response => response.json())
+        .then(data => {
+        	this.setState({
+		    	confirmLoading3: false,
+		    });
+            if(data.retcode == 200){
+            	this.handleCancel2();
+            	Modal.success({
+			    	title: 'files文件夹清理成功!',
+			    	content: 
+			    	<div>
+				    	<h3>清除的文件如下：</h3>
+				    	<br />
+				    	<ul>
+					    	{data.data.delFilesArr.map(function(file, index){
+						    		return <li key={index}>{file}</li>
+						    })}
+				    	</ul>
+			    	</div>,
+			  	});
+            }else if(data.retcode == 201){
+            	this.handleCancel2();
+            	Modal.success({
+			    	title: 'files文件夹清理成功!',
+			    	content: 
+			    	<div>
+				    	<p>files目录非常干净，没有要清除的文件，记得时常清理哦</p>
+			    	</div>,
+			  	});
+            }else{
+            	this.setState({
+			    	errTip3: data.retdesc
+			  	});
+            }
+        })
+        .catch(e => console.log("Oops, error", e))
+	}
+	handleCancel2(){
+	    this.setState({
+	    	visible2: false
+	    });
+	    setTimeout(() => {
+			this.refs.password2.value = '';
+			this.setState({
+		    	errTip3: '',
+		    	confirmLoading3: false
+		    });
+	    }, 500);
+	}
 	prepareData(){
 		const { unit } = this.props;
 		let localData = unit.toJS();
@@ -262,7 +344,7 @@ class Preview extends React.Component {
 	}
 	render() {
 		const { unit } = this.props;
-		const { visible, confirmLoading, confirmLoading2, stateTip, placeholder, errTip1, errTip2, stateOK, isDirnameExist } = this.state;
+		const { visible, visible2, confirmLoading, confirmLoading2, confirmLoading3, stateTip, placeholder, errTip1, errTip2, errTip3, stateOK, isDirnameExist } = this.state;
 		//初始化meta部分数据
 		let localData = unit.toJS();
 		let data = localData[0];
@@ -278,8 +360,9 @@ class Preview extends React.Component {
 							'"><div id="framePage"></div></body></html>';
 		return (
 			<section className="m-preview">
-			<span id="release" onClick={this.showModal.bind(this)}><i className="iconfont icon-fabu"></i>发布</span>
+				<span id="release" onClick={this.showReleaseModal.bind(this)}><i className="iconfont icon-fabu"></i>发布</span>
 				<a href="/released" className="see-released"><i className="iconfont icon-chakan"></i>查看</a>
+				<em className="clearDirectory" onClick={this.showClearModal.bind(this)}>清理</em>
 				<Modal title="请输入发布信息"
 					wrapClassName="publish-dialog"
 					maskClosable={false}
@@ -351,6 +434,43 @@ class Preview extends React.Component {
 			        		onInput={this.handleInput.bind(this)}
 			        		onFocus={()=>{this.setState({errTip2: ''})}}/>
 			         	<p className="errTip2"><i className={`iconfont icon-cuowu ${errTip2 == ""? "f-hide" : ""}`}></i>{errTip2}</p>
+			        </div>
+		        </Modal>
+		        <Modal title="哇塞，这都被你发现啦！"
+					wrapClassName="publish-dialog"
+					maskClosable={false}
+		         	visible={visible2}
+		         	onOk={this.handleOk2.bind(this)}
+			        onCancel={this.handleCancel2.bind(this)}
+			        footer={[
+		            	<Button 
+		            		key="back" 
+		            		size="large" 
+		            		onClick={this.handleCancel2.bind(this)}>
+		            		取消
+		            	</Button>,
+		            	<Button 
+		            		key="submit" 
+		            		id="clearBtn" 
+		            		type="primary" 
+		            		size="large" 
+		            		loading={confirmLoading3} 
+		            		onClick={this.handleOk2.bind(this)}>
+		            		确定
+		            	</Button>
+		          	]}
+		         >
+			        <div className="clear-info">这是清理后台上传和下载无用文件的按钮。清理下，让系统更流畅吧😁</div>
+			        <div className="password">
+			        	<label>平台密码</label>
+			        	<input 
+			        		ref="password2" 
+			        		name="平台密码" 
+			        		type="password" 
+			        		placeholder="请输入平台密码"
+			        		onInput={this.handleInput2.bind(this)}
+			        		onFocus={()=>{this.setState({errTip3: ''})}}/>
+			         	<p className="errTip3"><i className={`iconfont icon-cuowu ${errTip3 == ""? "f-hide" : ""}`}></i>{errTip3}</p>
 			        </div>
 		        </Modal>
 				<Frame  className="iframe" 

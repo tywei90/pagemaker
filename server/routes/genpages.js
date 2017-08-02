@@ -48,23 +48,63 @@ router.post('/download', function(req, res, next) {
             retcode: 200,
             retdesc: '下载成功'
         });
-        // express的方法不好使
-        // res.download(filepath, filename, function(err){
-        //     if(err) console.log(err);
-        //     fs.unlinkSync(filepath);
-        // }); 
-
     });
 });
 
 
-/* 文件删除接口 */
-router.post('/delete', function(req, res, next) {
-    var filepath = JSON.stringify(req.body);
-    fs.unlinkSync(filepath);
-    res.json({
-        retcode: 200,
-        retdesc: '删除成功'
+/* files文件夹清理接口 */
+router.post('/clear', function(req, res, next) {
+    let password = req.body.password;
+    let config = JSON.stringify(req.body.config);
+    // 验证平台密码
+    fs.readFileAsync('./data/password.json', 'utf-8')
+    .then(data => JSON.parse(data))
+    .then(tmp => bcrypt.compare(password, tmp.value))
+    .then((result) => {
+        if(!result){
+            res.json({
+                retcode: 400,
+                retdesc: '平台密码错误'
+            });
+            // 所有想直接结束promise链的，直接reject掉，去catch里处理
+            return Promise.reject();
+        }else{
+            let configStr = '';
+            let configArr = [config];
+            let files = fs.readdirSync('./data/');
+            files.forEach(function(file, index) {
+                let filePath = path.join('./data/', file);
+                if (fs.statSync(filePath).isDirectory()) {
+                    let tmp = fs.readFileSync( path.join(filePath, '/config.json'), 'utf-8');
+                    configArr.push(tmp);
+                }
+            });
+            configStr = configArr.join("");
+            let delFilesArr = dir.getFilesSync('./files/download/');
+            let fileArr = dir.getFilesSync('./files/upload/');
+            dir.rmdirSync('./files/download/');
+            fileArr.forEach(function(file, index){
+                if(configStr.indexOf(file) == -1){
+                    delFilesArr.push(file);
+                    fs.unlinkSync(file);
+                }
+            })
+            if(delFilesArr.length == 0){
+                res.json({
+                    retcode: 201,
+                    retdesc: '没有需要清除的文件'
+                });
+            }else{
+                res.json({
+                    retcode: 200,
+                    retdesc: '目录清除成功',
+                    data: {delFilesArr}
+                });
+            }
+        }
+    })
+    .catch(function(e) {
+        if(e instanceof Error) console.error(e.stack);
     });
 });
 

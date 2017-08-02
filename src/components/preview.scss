@@ -48,6 +48,22 @@ iframe {
     }
 }
 
+.clearDirectory {
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    margin-left: -29px;
+    font-size: 18px;
+    color: transparent;
+    cursor: pointer;
+}
+
+
 .publish-dialog {
     .ant-modal-body {
         padding: 35px 0 10px 50px;
@@ -92,7 +108,7 @@ iframe {
                     color: #35bb35;
                 }
             }
-            .errTip2{
+            .errTip2, .errTip3{
                 bottom: 0;
             }
         }

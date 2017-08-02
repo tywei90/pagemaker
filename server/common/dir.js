@@ -51,3 +51,27 @@ function rmdirSync(dirname) {
     }
 };
 exports.rmdirSync = rmdirSync;
+
+//同步获取文件夹里所有文件路径
+function getFilesSync(dirname) {
+    let fileArr = [];
+    let getDirSync =  function(dir){
+        if (fs.existsSync(dir)) {
+            var files = fs.readdirSync(dir);
+            files.forEach(function(file, index) {
+                var filePath = path.join(dir, file);
+                if (fs.statSync(filePath).isDirectory()) {
+                    getDirSync(filePath)
+                } else {
+                    // mac系统自带隐藏文件
+                    if(file != '.DS_Store'){
+                        fileArr.push(filePath);
+                    }
+                }
+            });
+        }
+    }
+    getDirSync (dirname);
+    return fileArr
+};
+exports.getFilesSync = getFilesSync;
