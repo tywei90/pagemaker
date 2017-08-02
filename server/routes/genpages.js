@@ -197,6 +197,71 @@ router.post('/release', function(req, res, next) {
     });
 });
 
+/* 页面删除接口 */
+router.post('/delDirectory', function(req, res, next) {
+    let dirname = req.body.dirname;
+    let password = req.body.password;
+    let code = req.body.code;
+    // 验证平台密码
+    fs.readFileAsync('./data/password.json', 'utf-8')
+    .then(data => JSON.parse(data))
+    .then(tmp => bcrypt.compare(password, tmp.value))
+    .then((result) => {
+        if(!result){
+            res.json({
+                retcode: 400,
+                retdesc: '平台密码错误'
+            });
+            // 所有想直接结束promise链的，直接reject掉，去catch里处理
+            return Promise.reject();
+        }else{
+            return fs.readdirAsync('./data/');
+        }
+    })
+    .then((files) => {
+        // 检测是否是新目录
+        let existDirname = [];
+        files.forEach(file => {
+            let stats = fs.statSync('./data/' + file);
+            if(stats.isDirectory() && /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(file)){
+                existDirname.push(file);
+            }
+        });
+        if(existDirname.indexOf(dirname) == -1){
+            res.json({
+                retcode: 410,
+                retdesc: '目录不存在'
+            });
+            // 所有想直接结束promise链的，直接reject掉，去catch里处理
+            return Promise.reject();
+        }else{
+            return fs.readFileAsync('./data/'+ dirname + '/code.json', 'utf-8');
+        }
+    })
+    .then(data => JSON.parse(data))
+    .then(tmp => bcrypt.compare(code, tmp.value))
+    .then((result) => {
+        if(!result){
+            res.json({
+                retcode: 420,
+                retdesc: '发布密码错误'
+            });
+            return Promise.reject();
+        }else{
+            fs.unlinkSync('./release/' + dirname + '.html');
+            dir.rmdirSync('./data/' + dirname);
+            res.json({
+                dirname,
+                retcode: 200,
+                retdesc: '删除目录成功!'
+            });
+        }
+    })
+    .catch(function(e) {
+        if(e instanceof Error) console.error(e.stack);
+    });
+});
+
 /* 检查目录接口 */
 router.post('/checkDirname', function(req, res, next) {
     let dirname = req.body.dirname;

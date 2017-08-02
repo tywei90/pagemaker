@@ -57,7 +57,9 @@ class Preview extends React.Component {
 	    	stateOK: false,
 	    	placeholder: '请输入发布密码',
 	    	visible: false,
-	    	confirmLoading: false
+	    	confirmLoading: false,
+	    	confirmLoading2: false,
+	    	isDirnameExist: false
 	  	}
 	}
 	showModal(){
@@ -110,13 +112,15 @@ class Preview extends React.Component {
             	this.setState({
             		errTip1: '',
             		stateTip: '这是一个新的发布目录，请创建您的发布密码并牢记，以便下次更新发布内容',
-            		placeholder: '请创建发布密码'
+            		placeholder: '请创建发布密码',
+            		isDirnameExist: false
             	});
             }else{
             	this.setState({
             		errTip1: '',
 			    	stateTip: '发布目录已存在，确认覆盖请输入发布密码',
-			    	placeholder: '请输入发布密码'
+			    	placeholder: '请输入发布密码',
+			    	isDirnameExist: true
 			  	});
             }
         })
@@ -177,9 +181,60 @@ class Preview extends React.Component {
 		    	stateTip: '',
 		    	stateOK: false,
 		    	placeholder: '请输入发布密码',
-		    	confirmLoading: false
+		    	confirmLoading: false,
+		    	confirmLoading2: false
 		    });
 	    }, 500);
+	}
+	confirmDel(){
+		var me = this;
+		confirm({
+		    title: '确认删除已发布页面?',
+		    content: '删除之后将不可恢复，请谨慎操作！',
+		    onOk() {
+		        me.handleDel();
+		    },
+		    onCancel() {},
+		});
+	}
+	handleDel(){
+		if(!this.state.stateOK || !this.state.isDirnameExist){
+			return
+		}
+		const { unit } = this.props;
+		let dirname = this.refs.dirname.value.trim();
+		let password = this.refs.password.value.trim();
+		let code = this.refs.code.value.trim();
+		this.setState({
+	    	confirmLoading2: true,
+	    });
+		fetch('/genpages/delDirectory', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({dirname, password, code})
+        })
+        .then(response => response.json())
+        .then(data => {
+        	this.setState({
+		    	confirmLoading2: false,
+		    });
+            if(data.retcode == 200){
+            	this.setState({
+            		visible: false
+            	});
+            	Modal.success({
+			    	title: '页面删除成功!',
+			    	content: <div>查看已发布的页面<a href="/released">点击这里</a></div>,
+			  	});
+            }else{
+            	this.setState({
+			    	errTip2: data.retdesc
+			  	});
+            }
+        })
+        .catch(e => console.log("Oops, error", e))
 	}
 	prepareData(){
 		const { unit } = this.props;
@@ -207,7 +262,7 @@ class Preview extends React.Component {
 	}
 	render() {
 		const { unit } = this.props;
-		const { visible, confirmLoading, stateTip, placeholder, errTip1, errTip2 } = this.state;
+		const { visible, confirmLoading, confirmLoading2, stateTip, placeholder, errTip1, errTip2, stateOK, isDirnameExist } = this.state;
 		//初始化meta部分数据
 		let localData = unit.toJS();
 		let data = localData[0];
@@ -232,9 +287,29 @@ class Preview extends React.Component {
 		         	onOk={this.handleOk.bind(this)}
 			        onCancel={this.handleCancel.bind(this)}
 		         	footer={[
-		            	<Button key="back" size="large" onClick={this.handleCancel.bind(this)}>取消</Button>,
-		            	<Button key="submit" id="releaseBtn" type="primary" size="large" loading={confirmLoading} onClick={this.handleOk.bind(this)}>
+		            	<Button 
+		            		key="back" 
+		            		size="large" 
+		            		onClick={this.handleCancel.bind(this)}>
+		            		取消
+		            	</Button>,
+		            	<Button 
+		            		key="submit" 
+		            		id="releaseBtn" 
+		            		type="primary" 
+		            		size="large" 
+		            		loading={confirmLoading} 
+		            		onClick={this.handleOk.bind(this)}>
 		            		发布
+		            	</Button>,
+		            	<Button 
+		            		style={{float: 'left', display: `${stateOK && isDirnameExist? 'inline-block': 'none'}`}}  
+		            		key="danger" 
+		            		type="danger" 
+		            		size="large" 
+		            		loading={confirmLoading2} 
+		            		onClick={this.confirmDel.bind(this)}>
+		            		删除
 		            	</Button>
 		          	]}
 		         >
