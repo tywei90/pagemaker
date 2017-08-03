@@ -39,7 +39,7 @@ class PreTitle extends React.Component {
 			textAlign: jsdata.textAlign,
 		}
 		return (
-			<section className={`title`} style={style} data-id={Math.random()}>
+			<section className={`title`} style={style}>
 				<a href= {jsdata.url}  style={styleInner} >
 					{jsdata.text}
 				</a>

@@ -31,7 +31,7 @@ class PreImg extends React.Component {
 			paddingLeft: jsdata.padding[3]
 		};
 		return (
-			<section className={`image`} style={style} data-id={Math.random()}>
+			<section className={`image`} style={style}>
 				<a href= {jsdata.url}>
 					<img src={jsdata.address || ''} />	
 				</a>			

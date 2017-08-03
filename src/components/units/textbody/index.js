@@ -31,7 +31,6 @@ class UnitTextBody extends React.Component {
                         <ul className="f-fr">
                             <li className="f-cb f-fl" style={{position:'relative'}}> 
                             <textarea
-                                data-id={Math.random()}
                                 className="f-fl"
                                 type="text"
                                 placeholder="正文内容"

@@ -129,7 +129,7 @@ class UnitPanel extends React.Component {
         const { showDetail } = this.state;
         return (
             editable?
-                <div className={`unit-common unit-${type} ${cls}`} data-id={Math.random()}>
+                <div className={`unit-common unit-${type} ${cls}`}>
                     <div 
                         className="header f-cb" 
                         onClick={(e) => !e.target.className.indexOf('header') && this.setState({'showDetail': !showDetail})}
