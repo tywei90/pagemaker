@@ -53,18 +53,19 @@ function rmdirSync(dirname) {
 exports.rmdirSync = rmdirSync;
 
 //同步获取文件夹里所有文件路径
-function getFilesSync(dirname) {
+function getFilesSync(dirname, delta) {
     let fileArr = [];
     let getDirSync =  function(dir){
         if (fs.existsSync(dir)) {
             var files = fs.readdirSync(dir);
             files.forEach(function(file, index) {
                 var filePath = path.join(dir, file);
-                if (fs.statSync(filePath).isDirectory()) {
+                var fileStat = fs.statSync(filePath)
+                if (fileStat.isDirectory()) {
                     getDirSync(filePath)
                 } else {
-                    // mac系统自带隐藏文件
-                    if(file != '.DS_Store'){
+                    // 排除mac系统自带隐藏文件和小于delta时间的本地缓存文件
+                    if(file != '.DS_Store' && (Date.now() - Date.parse(fileStat.atime) >= (delta || 0))){
                         fileArr.push(filePath);
                     }
                 }

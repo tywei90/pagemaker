@@ -66,6 +66,7 @@ iframe {
 
 .publish-dialog {
     .ant-modal-body {
+        width: 450px;
         padding: 35px 0 10px 50px;
         &>div {
             height: 60px;
@@ -111,6 +112,9 @@ iframe {
             .errTip2, .errTip3{
                 bottom: 0;
             }
+        }
+        .clear-info{
+            margin-bottom: 20px;
         }
         .dirname{
             height: 70px;

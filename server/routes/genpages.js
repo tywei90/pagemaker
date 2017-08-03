@@ -55,7 +55,6 @@ router.post('/download', function(req, res, next) {
 /* files文件夹清理接口 */
 router.post('/clear', function(req, res, next) {
     let password = req.body.password;
-    let config = JSON.stringify(req.body.config);
     // 验证平台密码
     fs.readFileAsync('./data/password.json', 'utf-8')
     .then(data => JSON.parse(data))
@@ -70,7 +69,7 @@ router.post('/clear', function(req, res, next) {
             return Promise.reject();
         }else{
             let configStr = '';
-            let configArr = [config];
+            let configArr = [];
             let files = fs.readdirSync('./data/');
             files.forEach(function(file, index) {
                 let filePath = path.join('./data/', file);
@@ -80,8 +79,10 @@ router.post('/clear', function(req, res, next) {
                 }
             });
             configStr = configArr.join("");
+            // 下载目录一定清空
             let delFilesArr = dir.getFilesSync('./files/download/');
-            let fileArr = dir.getFilesSync('./files/upload/');
+            // 上传目录会清理一个月前的文件
+            let fileArr = dir.getFilesSync('./files/upload/', 30*24*3600*1000);
             dir.rmdirSync('./files/download/');
             fileArr.forEach(function(file, index){
                 if(configStr.indexOf(file) == -1){

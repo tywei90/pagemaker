@@ -253,8 +253,6 @@ class Preview extends React.Component {
 		}
 	}
 	handleOk2(){
-		const { unit } = this.props;
-		let config = unit.toJS();
 		let password = this.refs.password2.value.trim();
 		if(password == ''){
 			return
@@ -267,7 +265,7 @@ class Preview extends React.Component {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ password, config })
+            body: JSON.stringify({ password })
         })
         .then(response => response.json())
         .then(data => {
@@ -395,7 +393,7 @@ class Preview extends React.Component {
 		            		删除
 		            	</Button>
 		          	]}
-		         >
+		        >
 			        <div className="dirname f-cb">
 			        	<label>发布目录</label>
 			        	<input 
@@ -460,7 +458,10 @@ class Preview extends React.Component {
 		            	</Button>
 		          	]}
 		         >
-			        <div className="clear-info">这是清理后台上传和下载无用文件的按钮。清理下，让系统更流畅吧😁</div>
+		         	<div className="clear-info">
+		         		这是清理后台上传和下载无用文件的按钮。清理下，让系统更流畅吧😁
+		         		<p>注意：这会清理一个月前上传到服务器但是没有发布的文件，将会导致部分用户缓存文件加载不了。</p>
+			        </div>
 			        <div className="password">
 			        	<label>平台密码</label>
 			        	<input 

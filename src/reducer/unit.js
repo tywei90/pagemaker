@@ -30,7 +30,7 @@ const unitsConfig = immutable.fromJS({
         name: '图片',
         address: '',
         url: '',
-        bgColor: 'transparent',
+        bgColor: '#fff',
         padding: [0, 0, 0, 0],
         margin: [0, 30, 24, 30]
     },
