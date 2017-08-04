@@ -57,6 +57,7 @@
     "ftp": "^0.3.10",
     "imagemin": "^5.2.2",
     "immutable": "^3.8.1",
+    "jquery": "^3.2.1",
     "less-middleware": "~2.2.0",
     "log4js": "~1.0.1",
     "md5": "^2.2.1",

@@ -177,11 +177,9 @@ class UnitTextBody extends React.Component {
                             </li>
                         </ul>
                     </li>
-                    {/* 其他设置 */}
                     <li className="f-cb">
                         <label className="f-fl">其他设置</label>
                         <ul className="f-fr">
-                          {/* 这里需要看一下 */}
                             <li className="f-fl">
                                 <input
                                     type="checkbox"

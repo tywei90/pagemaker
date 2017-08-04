@@ -10,6 +10,10 @@ import PreTitle from './previewUnits/preTitle';
 import PreImg from './previewUnits/preImg';
 import PreTextBody from './previewUnits/preTextBody';
 import PreButton from './previewUnits/preButton';
+import PreAudio from './previewUnits/preAudio';
+import $ from 'jquery'
+
+import init from './init.js';
 
 import { Modal, Button } from 'antd';
 const confirm = Modal.confirm;
@@ -37,6 +41,11 @@ const renderUnits = units => {
 			case 'BUTTON' :
 				return (
 					<PreButton key={index} id={index} data={item} />
+				)
+			break;
+			case 'AUDIO' :
+				return (
+					<PreAudio key={index} id={index} data={item} />
 				)
 			break;
 		}
@@ -336,6 +345,8 @@ class Preview extends React.Component {
 				'</head>'+ 
 				'<body style="background-color: '+ data.bgColor +'">' + 
 					bodyContext + 
+					'<script  type="text/javascript" src="/public/javascripts/jquery-2.2.4.js"></script>' +
+					'<script  type="text/javascript" src="/release/index.js"></script>' +
 				'</body>' + 
 			'</html>';
 		return encodeURI(htmlContext)
@@ -346,7 +357,8 @@ class Preview extends React.Component {
 		//初始化meta部分数据
 		let localData = unit.toJS();
 		let data = localData[0];
-		let initialContent = '<!DOCTYPE html><html><head>'+ 
+		let initialContent='<!DOCTYPE html><html>' + 
+							'<head>'+ 
 								'<title>' + data.title +'</title>'+
 								'<link rel="shortcut icon" href="/build/favicon.ico">' + 
 								'<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">'+
@@ -354,13 +366,20 @@ class Preview extends React.Component {
 								'<meta name="description" content=' + data.desc + '>'+ 
 								'<link type="text/css" rel="stylesheet" href="/release/index.css" />' + 
 							'</head>'+ 
-							'<body style="background-color: '+ data.bgColor +
-							'"><div id="framePage"></div></body></html>';
+							'<body style="background-color: '+ data.bgColor + '"><div id="framePage"></div>'+
+							'</body></html>';
 		return (
 			<section className="m-preview">
 				<span id="release" onClick={this.showReleaseModal.bind(this)}><i className="iconfont icon-fabu"></i>发布</span>
 				<a href="/released" className="see-released"><i className="iconfont icon-chakan"></i>查看</a>
 				<em className="clearDirectory" onClick={this.showClearModal.bind(this)}>清理</em>
+				<Frame  className="iframe" 
+	  					initialContent= {initialContent}
+	  					contentDidMount={init}
+	  					contentDidUpdate={init}
+	  					mountTarget='#framePage'>
+					{renderUnits(unit)}
+				</Frame>
 				<Modal title="请输入发布信息"
 					wrapClassName="publish-dialog"
 					maskClosable={false}
@@ -474,11 +493,6 @@ class Preview extends React.Component {
 			         	<p className="errTip3"><i className={`iconfont icon-cuowu ${errTip3 == ""? "f-hide" : ""}`}></i>{errTip3}</p>
 			        </div>
 		        </Modal>
-				<Frame  className="iframe" 
-	  					initialContent= {initialContent}
-	  					mountTarget='#framePage'>
-					{renderUnits(unit)}
-				</Frame>
 			</section>
 		);
 	}

@@ -69,11 +69,11 @@ const unitsConfig = immutable.fromJS({
         type: 'AUDIO',
         name: '音频',
         address: '',
-        showType: '',
-        title: '',
-        style: '',
-        playSetting: '',
-        margin: [0, 30, 24, 30]
+        size: 'middle',
+        position: 'topRight',
+        bgColor: '#9160c3',
+        loop: true,
+        auto: true
     },
     CODE: {
         type: 'CODE',
