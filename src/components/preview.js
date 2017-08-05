@@ -11,9 +11,9 @@ import PreImg from './previewUnits/preImg';
 import PreTextBody from './previewUnits/preTextBody';
 import PreButton from './previewUnits/preButton';
 import PreAudio from './previewUnits/preAudio';
-import $ from 'jquery'
+import PreCode from './previewUnits/preCode';
 
-import init from './init.js';
+import $ from 'jquery'
 
 import { Modal, Button } from 'antd';
 const confirm = Modal.confirm;
@@ -46,6 +46,11 @@ const renderUnits = units => {
 			case 'AUDIO' :
 				return (
 					<PreAudio key={index} id={index} data={item} />
+				)
+			break;
+			case 'CODE' :
+				return (
+					<PreCode key={index} id={index} data={item} />
 				)
 			break;
 		}
@@ -326,6 +331,7 @@ class Preview extends React.Component {
 	    }, 500);
 	}
 	prepareData(){
+		let me = this;
 		const { unit } = this.props;
 		let localData = unit.toJS();
 		let data = localData[0];
@@ -342,14 +348,60 @@ class Preview extends React.Component {
 					'<meta name="keywords" content=' + data.keywords + '>'+
 					'<meta name="description" content=' + data.desc + '>'+ 
 					'<link type="text/css" rel="stylesheet" href="/release/index.css" />' + 
+					'<style id="insertCSS" type="text/css">' + me.insertCSS + '</style>' + 
 				'</head>'+ 
 				'<body style="background-color: '+ data.bgColor +'">' + 
 					bodyContext + 
 					'<script  type="text/javascript" src="/public/javascripts/jquery-2.2.4.js"></script>' +
 					'<script  type="text/javascript" src="/release/index.js"></script>' +
+					'<script  type="text/javascript">' + me.insertJS + '</script>'+
 				'</body>' + 
 			'</html>';
 		return encodeURI(htmlContext)
+	}
+	init(isMount){
+		// 插入index.js脚本
+		let me = this;
+		const { unit } = this.props;
+		let jsArr = [];
+		let cssArr = [];
+		let localData = unit.toJS();
+		// 在iframe的head里动态插入执行脚本，保证js执行环境一致
+		let iframe = document.getElementsByTagName('iframe')[0];
+		let iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+		let body= iframeDoc.getElementsByTagName('body')[0]; 
+		let $jquery = $('#jquery', iframeDoc);
+		function reload(){
+			let script= document.createElement('script');
+			script.type= 'text/javascript'; 
+			script.src= '/release/index.js'; 
+			body.appendChild(script);
+			// 页面不刷新，所以需要手动删除每次添加的节点
+			script.parentNode.removeChild(script);
+
+			// 插入页面添加的JSCSS组件脚本
+			localData.forEach(function(item, index){
+				if(item.type == 'CODE'){
+					jsArr.push(item.js);
+					cssArr.push(item.css);
+				}
+			})
+			let $insertCSS = $('#insertCSS', iframeDoc);
+			$insertCSS[0].innerText = me.insertCSS = cssArr.join('\n');
+			let script2= document.createElement('script'); 
+			script2.type= 'text/javascript'; 
+			script2.innerText = me.insertJS = jsArr.join(';');
+			body.appendChild(script2);
+			script2.parentNode.removeChild(script2);
+		}
+		if(isMount){
+			// 脚本需要在jquery加载完毕后执行
+			$jquery.on('load', function(){
+				reload()
+			})
+		}else{
+			reload()
+		}
 	}
 	render() {
 		const { unit } = this.props;
@@ -365,8 +417,10 @@ class Preview extends React.Component {
 								'<meta name="keywords" content=' + data.keywords + '>'+
 								'<meta name="description" content=' + data.desc + '>'+ 
 								'<link type="text/css" rel="stylesheet" href="/release/index.css" />' + 
+								'<style id="insertCSS" type="text/css"></style>' + 
 							'</head>'+ 
 							'<body style="background-color: '+ data.bgColor + '"><div id="framePage"></div>'+
+							'<script  id="jquery" type="text/javascript" src="/public/javascripts/jquery-2.2.4.js"></script>' +
 							'</body></html>';
 		return (
 			<section className="m-preview">
@@ -375,8 +429,8 @@ class Preview extends React.Component {
 				<em className="clearDirectory" onClick={this.showClearModal.bind(this)}>清理</em>
 				<Frame  className="iframe" 
 	  					initialContent= {initialContent}
-	  					contentDidMount={init}
-	  					contentDidUpdate={init}
+	  					contentDidMount={this.init.bind(this, true)}
+	  					contentDidUpdate={this.init.bind(this, false)}
 	  					mountTarget='#framePage'>
 					{renderUnits(unit)}
 				</Frame>

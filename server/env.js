@@ -1,9 +1,14 @@
 var fs = require('fs');
 var path = require('path');
 var log4js = require('log4js');
+var opn = require('opn');
 
 var logger = log4js.getLogger();
 logger.debug("服务环境初始化");
+
+// opn('http://localhost:3000/genpages').then(() => {
+//     console.log('pagemaker页面已打开');
+// });
 
 var env = {
     basedir: __dirname,

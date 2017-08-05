@@ -1,12 +1,6 @@
 $(function(){  
-	var $main;
-	var iframe = document.getElementsByTagName('iframe')[0];
-	if(iframe){
-		$main = iframe.contentDocument || iframe.contentWindow.document;
-	}else{
-		$main = $('body');
-	}
-	// 防止preview部分代码每次更新都添加监听事件
+	var $main = $('body');
+    // 防止preview组件每次插入此代码都添加监听事件
 	$('.audio', $main).off('click');
     $('.audio', $main).on('click',function(event) {
     	var $curTarget = $(event.currentTarget);

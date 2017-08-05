@@ -17,6 +17,7 @@ import UnitImage from './units/image/index'
 import UnitButton from './units/button/index'
 import UnitTextBody from './units/textbody/index'
 import UnitAudio from './units/audio/index'
+import UnitCode from './units/code/index'
 
 import Preview from './preview.js'
 
@@ -37,6 +38,8 @@ const renderUnits = units => {
                 return <li key={index} id={index}><UnitTextBody id={index} data={item} /></li>
             case 'AUDIO' :
                 return <li key={index} id={index}><UnitAudio id={index} data={item} /></li>
+            case 'CODE' :
+                return <li key={index} id={index}><UnitCode id={index} data={item} /></li>
         }
     });
 };
