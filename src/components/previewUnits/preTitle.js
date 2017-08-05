@@ -19,9 +19,9 @@ class PreTitle extends React.Component {
 		const { data } = this.props;
 		let jsdata = data.toJS();
 		switch(jsdata.fontSize) {
-			case 'small': fontSize = '0.5rem'; break;
-			case 'middle': fontSize = '1rem'; break;
-			case 'big': fontSize = '1.5rem'; break;
+			case 'small': fontSize = '1.2rem'; break;
+			case 'middle': fontSize = '1.5rem'; break;
+			case 'big': fontSize = '2rem'; break;
 		}
 		style = {
 			marginTop: jsdata.margin[0],

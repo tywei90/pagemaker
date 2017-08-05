@@ -30,10 +30,10 @@ class PreTextBody extends React.Component {
 		}
 		let contentHtml = <article className='article-content' dangerouslySetInnerHTML={{__html: content}}></article>;
 		switch(jsdata.fontSize) {
-			case 'small': fontSize = '0.9rem'; break;
-			case 'middle': fontSize = '1rem'; break;
-			case 'big': fontSize = '1.05rem'; break;
-			case 'superbig': fontSize = '1.1rem'; break;
+			case 'small': fontSize = '1rem'; break;
+			case 'middle': fontSize = '1.2rem'; break;
+			case 'big': fontSize = '1.4rem'; break;
+			case 'superbig': fontSize = '1.6rem'; break;
 		}
 		if (jsdata.retract) {
 			textIndent = '2em'

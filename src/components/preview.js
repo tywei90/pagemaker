@@ -363,9 +363,11 @@ class Preview extends React.Component {
 		// 插入index.js脚本
 		let me = this;
 		const { unit } = this.props;
+		let localData = unit.toJS();
+		// 增加参数fromType，表明这次是那个组件变化的，确定需不需要执行这部分代码
+		if(localData[0].fromType != 'AUDIO' && localData[0].fromType != 'CODE' && localData[0].fromType != 'ALL') return;
 		let jsArr = [];
 		let cssArr = [];
-		let localData = unit.toJS();
 		// 在iframe的head里动态插入执行脚本，保证js执行环境一致
 		let iframe = document.getElementsByTagName('iframe')[0];
 		let iframeDoc = iframe.contentDocument || iframe.contentWindow.document;

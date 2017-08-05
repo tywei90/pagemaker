@@ -9,11 +9,6 @@ const unitsConfig = immutable.fromJS({
         desc: '',
         bgColor: '#fff'
     },
-    OGP: {
-        type: 'OGP',
-        name: 'OGP信息配置',
-        contents: []
-    },
     TITLE: {
         type: 'TITLE',
         name: '标题',
@@ -52,7 +47,7 @@ const unitsConfig = immutable.fromJS({
         type: 'TEXTBODY',
         name: '正文',
         text: '',
-        textColor: '#eee',
+        textColor: '#333',
         bgColor: '#fff',
         fontSize: "small",
         textAlign: "center",
@@ -90,13 +85,15 @@ const initialState = immutable.fromJS([
         title: '',
         keywords: '',
         desc: '',
-        bgColor: '#fff'
+        bgColor: '#fff',
+        // 非常重要的属性，表明这次state变化来自哪个组件！
+        fromType: ''
     }
 ]);
 
 
 function reducer(state = initialState, action) {
-    let newState, localData
+    let newState, localData, tmp
     // 初始化从localstorage取数据
     if (state === initialState) {
         localData = localStorage.getItem('config');
@@ -104,37 +101,44 @@ function reducer(state = initialState, action) {
     }
     switch (action.type) {
         case 'AddUnit': {
-            newState = state.push(unitsConfig.get(action.name));
+            tmp = state.push(unitsConfig.get(action.name));
+            newState = tmp.setIn([0, 'fromType'], action.name);
             break
         }
         case 'CopyUnit': {
-            newState = state.push(state.get(action.id));
+            tmp = state.push(state.get(action.id));
+            newState = tmp.setIn([0, 'fromType'], state.getIn([action.id, 'type']));
             break
         }
         case 'EditUnit': {
-            newState = state.setIn([action.id, action.prop], action.value);
+            tmp = state.setIn([action.id, action.prop], action.value);
+            newState = tmp.setIn([0, 'fromType'], state.getIn([action.id, 'type']));
             break
         }
         case 'RemoveUnit': {
-            newState = state.splice(action.id, 1);
+            tmp = state.splice(action.id, 1);
+            newState = tmp.setIn([0, 'fromType'], '');
             break
         }
         case 'Clear': {
-            newState = initialState;
+            tmp = initialState;
+            newState = tmp.setIn([0, 'fromType'], '');
             break
         }
         case 'Insert': {
-            newState = immutable.fromJS(action.data);
+            tmp = immutable.fromJS(action.data);
+            newState = tmp.setIn([0, 'fromType'], 'ALL');
             break
         }
         case 'MoveUnit':{
             const {fid, tid} = action;
             const fitem = state.get(fid);
             if (fitem && fid != tid) {
-                newState = state.splice(fid, 1).splice(tid, 0, fitem); 
+                tmp = state.splice(fid, 1).splice(tid, 0, fitem);
             } else {
-                newState = state;
+                tmp = state;
             }
+            newState = tmp.setIn([0, 'fromType'], '');
             break;
         }
         default:
